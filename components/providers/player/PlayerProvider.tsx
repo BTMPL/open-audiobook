@@ -23,7 +23,7 @@ export type Track = {
   chapters: Chapter[];
 };
 
-var track1 = {
+const track1 = {
   id: "1",
   url: "http://127.0.0.1:8080/book.mp3",
   title: "Hyperion",
@@ -62,6 +62,8 @@ var track1 = {
     },
   ],
 };
+
+export const tracks = [track1, track1, track1, track1, track1, track1, track1];
 
 export function findChapter(chapters: Chapter[], currentTime: number): Chapter {
   for (let i = 0; i < chapters.length; i++) {
