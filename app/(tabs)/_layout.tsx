@@ -1,50 +1,40 @@
-import { Tabs } from "expo-router";
-import React from "react";
-import { Platform } from "react-native";
+import { Text, StyleSheet, View, ScrollView } from "react-native";
+import { Tabs, TabList, TabTrigger, TabSlot } from "expo-router/ui";
+import { MiniPlayer } from "@/components/miniplayer/MiniPlayer";
 
-import { HapticTab } from "@/components/HapticTab";
-import { IconSymbol } from "@/components/ui/IconSymbol";
-import TabBarBackground from "@/components/ui/TabBarBackground";
-import { Colors } from "@/constants/Colors";
-import { useColorScheme } from "@/hooks/useColorScheme";
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
+export default function Layout() {
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: "absolute",
-          },
-          default: {},
-        }),
-      }}
-    >
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: "Home",
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="house.fill" color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: "Explore",
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="paperplane.fill" color={color} />
-          ),
-        }}
-      />
+    <Tabs>
+      <View style={{ flex: 1 }}>
+        <TabSlot />
+      </View>
+      <View style={{ marginTop: 10 }}>
+        <MiniPlayer />
+      </View>
+      <TabList style={styles.tabs}>
+        <TabTrigger style={styles.tabTrigger} name="home" href="/">
+          <Text style={{ color: "#ffffff" }}>Home</Text>
+        </TabTrigger>
+        <TabTrigger style={styles.tabTrigger} name="profile" href="/profile">
+          <Text style={{ color: "#ffffff" }}>Profile</Text>
+        </TabTrigger>
+      </TabList>
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  tabs: {
+    // position: "absolute",
+    backgroundColor: "#d3d3d3",
+    bottom: 0,
+    padding: 10,
+    paddingBottom: 32,
+  },
+  tabTrigger: {
+    flex: 1,
+    height: 32,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});

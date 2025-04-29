@@ -8,25 +8,27 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { ThemedView } from "@/components/ThemedView";
-import { useBottomTabOverflow } from "@/components/ui/TabBarBackground";
+// import { useBottomTabOverflow } from "@/components/ui/TabBarBackground";
 import { useColorScheme } from "@/hooks/useColorScheme";
 
 const HEADER_HEIGHT = 250;
 
 type Props = PropsWithChildren<{
+  headerComponent: ReactElement;
   headerImage: ReactElement;
   headerBackgroundColor: { dark: string; light: string };
 }>;
 
 export default function ParallaxScrollView({
   children,
+  headerComponent,
   headerImage,
   headerBackgroundColor,
 }: Props) {
   const colorScheme = useColorScheme() ?? "light";
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
   const scrollOffset = useScrollViewOffset(scrollRef);
-  const bottom = useBottomTabOverflow();
+  // const bottom = useBottomTabOverflow();
   const headerAnimatedStyle = useAnimatedStyle(() => {
     return {
       transform: [
@@ -53,9 +55,22 @@ export default function ParallaxScrollView({
       <Animated.ScrollView
         ref={scrollRef}
         scrollEventThrottle={16}
-        scrollIndicatorInsets={{ bottom }}
-        contentContainerStyle={{ paddingBottom: bottom + 16, flexGrow: 1 }}
+        scrollIndicatorInsets={{ bottom: 0 }}
+        contentContainerStyle={{ paddingBottom: 0 + 16, flexGrow: 1 }}
       >
+        <Animated.View
+          style={{
+            position: "absolute",
+            padding: 10,
+            top: 48,
+            left: 0,
+            right: 0,
+            overflow: "hidden",
+            zIndex: 10,
+          }}
+        >
+          {headerComponent}
+        </Animated.View>
         <Animated.View
           style={[
             styles.header,

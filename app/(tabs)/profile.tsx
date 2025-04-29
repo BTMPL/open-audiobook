@@ -1,11 +1,11 @@
 import { View, Text, ScrollView } from "react-native";
 
-export default function Index() {
+export default function Profile() {
   return (
     <ScrollView>
       {Array.from({ length: 200 }).map((_, it) => (
         <Text key={it} style={{ color: "#ffffff" }}>
-          index - {it}
+          profile - {it}
         </Text>
       ))}
     </ScrollView>
