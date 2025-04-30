@@ -23,7 +23,7 @@ export default function Index() {
   });
 
   useEffect(() => {
-    store.listenToTable((data) => {
+    store.all$((data) => {
       setBooks(Object.values(data));
     });
   }, []);

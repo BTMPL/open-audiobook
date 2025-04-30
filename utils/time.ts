@@ -5,7 +5,7 @@ export function toHms(secs?: number, simple: boolean = false) {
   const hours = Math.floor(secs / 3600);
   let ret = "";
   if (hours) ret += `${hours.toString()}${simple ? ":" : "h "}`;
-  if (minutes || hours)
+  if (minutes || hours || simple)
     ret += `${minutes.toString().padStart(2, "0")}${simple ? ":" : "m "}`;
   ret += `${seconds.toString().padStart(2, "0")}${simple ? "" : "s"}`;
 

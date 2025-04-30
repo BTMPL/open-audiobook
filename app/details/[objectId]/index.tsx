@@ -13,10 +13,6 @@ import {
   Appearance,
 } from "react-native";
 
-import { MMKV } from "react-native-mmkv";
-
-export const storage = new MMKV();
-
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import Slider from "@react-native-community/slider";
 

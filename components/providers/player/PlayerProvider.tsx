@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import TrackPlayer, {
   Progress,
@@ -6,6 +6,7 @@ import TrackPlayer, {
   usePlaybackState,
   useProgress,
 } from "react-native-track-player";
+import { useStore } from "../datbase/DatabaseProvider";
 
 export type Chapter = {
   from: number;
@@ -17,15 +18,20 @@ export type Track = {
   id: string;
   source: Partial<Record<SourceType, Source>>;
   title: string;
+  authors: string[];
+  status: TrackStatus;
   cover: string;
   synopsis: string;
   duration: number;
+  progress: number;
   chapters: Chapter[];
   addedAt: number;
   lastPlayedAt: number;
 };
 
 export type SourceType = "remote" | "local";
+
+export type TrackStatus = "not_started" | "in_progress" | "finished";
 
 export type RemoteSource = {
   url: string;
@@ -49,9 +55,12 @@ const track1: Track = {
   cover: "http://127.0.0.1:8080/hyperion.jpg",
   addedAt: Date.now(),
   lastPlayedAt: Date.now(),
+  status: "not_started",
+  authors: ["Dan Simmons"],
   synopsis:
     "The novel begins with the Consul receiving a message from Hegemony CEO Meina Gladstone that he is to return to the planet Hyperion as a member of the Shrike Pilgrimage. It is explained that the Time Tombs on Hyperion appear to be opening and an Ouster fleet is approaching the system, although their intentions are unknown. Gladstone also explains that one of the pilgrims is suspected to be an agent of the Ousters, but they don't know which one. The Consul is to meet up with the Templar tree ship Yggdrasill along with the other pilgrims on his journey to the Outback planet. ",
   duration: 8 * 60 * 60 + 25 * 60 + 19,
+  progress: 1,
   chapters: [
     { from: 0, to: 2 * 60 + 7, title: "Book info" },
     { from: 2 * 60 + 7 + 1, to: 13 * 60 + 9, title: "Prologue" },
@@ -127,19 +136,47 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
   const [track, setTrack] = React.useState<Track | undefined>();
 
   const progress = useProgress();
+  const books = useStore<Track>("books");
   const state = usePlaybackState();
 
-  React.useMemo(() => {
+  useEffect(() => {
     TrackPlayer.setupPlayer();
-  }, []);
-  React.useEffect(() => {
-    const loadTrack = Object.values(track1.source).find((s) => s.current);
-    if (loadTrack) TrackPlayer.add([loadTrack]);
-    setTrack(track1);
+
+    books.byId$("1", (book) => {
+      const loadTrack = Object.values(book.source).find((s) => s.current);
+      if (loadTrack) TrackPlayer.add([loadTrack]);
+      setTrack(book);
+    });
     return () => {
       TrackPlayer.stop();
     };
   }, []);
+
+  const { id: trackId, status, progress: trackProgress } = track || {};
+
+  // track progress, this can be debounced
+  useEffect(() => {
+    if (!trackId) return;
+    if (
+      state.state === State.Stopped ||
+      state.state === State.Paused ||
+      state.state === State.Playing
+    ) {
+      if (trackProgress !== progress.position) {
+        console.log(`updating progress of ${trackId} to ${progress.position}`);
+        const result = books.update(trackId, {
+          status: "in_progress",
+          progress: progress.position,
+        });
+
+        console.log(result.status);
+        setTrack(result);
+      }
+    }
+  }, [trackProgress, trackId, state.state, progress.position]);
+
+  console.log(track?.progress);
+
   return (
     <PlayerContext.Provider
       value={{

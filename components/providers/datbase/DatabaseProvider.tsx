@@ -43,7 +43,13 @@ const useAndStartPersister = (store: Store) =>
     (persister) =>
       persister.load().then(() => {
         persister.startAutoSave();
-      })
+      }),
+    [],
+    (persister) => {
+      console.log("Persister detroying");
+      persister.save();
+      persister.stopAutoSave();
+    }
   );
 
 export type StoreName = "books";
@@ -61,7 +67,7 @@ const Model = <T extends StoreableObject>(table: StoreName, store: Store) => {
     store.setRow(table, id, serialize(object));
     return { [id]: object };
   };
-  const update = (id: string, object: T): T =>
+  const update = (id: string, object: Partial<T>): T =>
     unserialize(
       store.setPartialRow(table, id, serialize(object)).getRow(table, id)
     );
@@ -71,13 +77,20 @@ const Model = <T extends StoreableObject>(table: StoreName, store: Store) => {
     if (data?.id) return data as T;
     return undefined;
   };
+
+  const byId$ = (id: string, callback: (data: T) => void) => {
+    store.addRowListener(table, id, (store, tableId) => {
+      const data = unserialize(store.getRow(table, id));
+      if (data?.id) return callback(data as T);
+    });
+  };
   const all = (): Record<T["id"], T> =>
     Object.entries(store.getTable(table)).reduce((acc, [key, value]) => {
       acc[key] = unserialize(value);
       return acc;
     }, {} as Record<string, Record<keyof T, any>>);
 
-  const listenToTable = (callback: (all: Record<T["id"], T>) => void) => {
+  const all$ = (callback: (all: Record<T["id"], T>) => void) => {
     store.addTableListener(table, (store, tableId) => {
       return callback(all());
     });
@@ -88,12 +101,15 @@ const Model = <T extends StoreableObject>(table: StoreName, store: Store) => {
     update,
     remove,
     byId,
+    byId$,
     all,
-    listenToTable,
+    all$,
   };
 };
 
-export function serialize<T extends StoreableObject>(track: T): Row {
+export function serialize<T extends StoreableObject | Partial<StoreableObject>>(
+  track: T
+): Row {
   return Object.entries(track).reduce((acc, [key, value]) => {
     if (typeof value === "string" || typeof value === "number") {
       acc[key] = value;

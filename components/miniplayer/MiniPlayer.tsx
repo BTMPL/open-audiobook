@@ -2,20 +2,14 @@ import { View, Text, Image, StyleSheet, Pressable } from "react-native";
 import { findChapter, usePlayer } from "../providers/player/PlayerProvider";
 import { toHms } from "@/utils/time";
 import { useRouter } from "expo-router";
-import { MMKV } from "react-native-mmkv";
 import { useEffect } from "react";
 import { State } from "react-native-track-player";
-
-export const storage = new MMKV();
 
 export const MiniPlayer = () => {
   const player = usePlayer();
   const router = useRouter();
 
-  const position =
-    player.progress.position ||
-    storage.getNumber(`track.${player.track?.id}.position`) ||
-    0;
+  const position = player.progress.position || player.track?.progress || 0;
 
   const chapter = player.track
     ? findChapter(player.track.chapters, position)
@@ -24,9 +18,7 @@ export const MiniPlayer = () => {
   useEffect(() => {
     if (!player.track) return;
 
-    const storedPosition = storage.getNumber(
-      `track.${player.track?.id}.position`
-    );
+    const storedPosition = player.track.progress;
 
     if (storedPosition && player.state !== State.Playing) {
       player.seekTo(storedPosition);
@@ -34,10 +26,6 @@ export const MiniPlayer = () => {
 
     return () => {};
   }, [player.track]);
-
-  useEffect(() => {
-    storage.set(`track.${player.track?.id}.position`, position);
-  }, [position]);
 
   return (
     <View style={style.container}>
