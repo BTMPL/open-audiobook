@@ -21,14 +21,21 @@ import { State } from "react-native-track-player";
 import {
   Chapter,
   findChapter,
+  Source,
+  SourceType,
+  Track,
   usePlayer,
 } from "@/components/providers/player/PlayerProvider";
 import { toHms } from "@/utils/time";
 import { useRouter } from "expo-router";
+import { useDownload } from "@/components/providers/download/DownloadProvider";
+import { useStore } from "@/components/providers/datbase/DatabaseProvider";
 
 export default function HomeScreen() {
   const player = usePlayer();
   const router = useRouter();
+  const download = useDownload();
+  const store = useStore<Track>("books");
 
   const [chapterModalVisible, setChapterModalVisible] = useState(false);
 
@@ -67,6 +74,39 @@ export default function HomeScreen() {
         <ScrollView style={style.synopsisContainer}>
           <Text style={style.synopsis}>{player.track?.synopsis}</Text>
         </ScrollView>
+
+        <Pressable
+          onPress={() => {
+            if (!player.track) return;
+            const url = player.track.source.remote?.url;
+            if (!url) return;
+            download.start(url, `${player.track.id}.mp3`, (percentage, uri) => {
+              console.log("Download percentage: ", percentage, uri);
+              if (uri && player.track?.id) {
+                store.update(player.track.id, {
+                  source: Object.entries(player.track.source).reduce(
+                    (acc, [key, value]) => {
+                      if (key === "local") return acc;
+                      acc[key as SourceType] = {
+                        ...value,
+                        current: false,
+                      };
+                      return acc;
+                    },
+                    {
+                      local: {
+                        url: uri,
+                        current: true,
+                      },
+                    } as Record<SourceType, Source>
+                  ),
+                });
+              }
+            });
+          }}
+        >
+          <Text>Download</Text>
+        </Pressable>
 
         <Pressable
           onPress={() => {

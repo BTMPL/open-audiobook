@@ -4,7 +4,7 @@ import { Text, ScrollView, TouchableOpacity } from "react-native";
 
 export default function Profile() {
   const store = useStore<Track>("books");
-  const id = "2";
+  const id = "1";
 
   return (
     <ScrollView>

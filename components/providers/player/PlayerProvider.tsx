@@ -37,17 +37,19 @@ export type RemoteSource = {
   url: string;
 };
 
+export type LocalSource = {
+  url: string;
+};
+
 export type Source = {
   current: boolean;
-  position: number;
-} & RemoteSource;
+} & (RemoteSource | LocalSource);
 
 const track1: Track = {
   id: "1",
   source: {
     remote: {
       current: true,
-      position: 0,
       url: "http://127.0.0.1:8080/book.mp3",
     },
   },
@@ -138,6 +140,8 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
   const progress = useProgress();
   const books = useStore<Track>("books");
   const state = usePlaybackState();
+
+  console.log(track);
 
   useEffect(() => {
     TrackPlayer.setupPlayer();
