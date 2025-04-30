@@ -4,6 +4,7 @@ import { Text, ScrollView, TouchableOpacity } from "react-native";
 
 export default function Profile() {
   const store = useStore<Track>("books");
+  const id = "2";
 
   return (
     <ScrollView>
@@ -11,12 +12,12 @@ export default function Profile() {
         <TouchableOpacity key={it}>
           <Text
             onPress={async () => {
-              if (store.byId("1")) store.remove("1");
-              else store.add({ ...tracks[0] });
+              if (store.byId(id)) store.remove(id);
+              else store.add({ ...tracks[0], id });
             }}
             style={{ color: "#ffffff" }}
           >
-            {store.byId("1") ? "remove" : "add"} {it}
+            {store.byId(id) ? "remove" : "add"} {it}
           </Text>
         </TouchableOpacity>
       ))}

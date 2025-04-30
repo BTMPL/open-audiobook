@@ -152,30 +152,25 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
     };
   }, []);
 
-  const { id: trackId, status, progress: trackProgress } = track || {};
+  const { id: trackId, progress: trackProgress } = track || {};
 
   // track progress, this can be debounced
   useEffect(() => {
     if (!trackId) return;
     if (
-      state.state === State.Stopped ||
-      state.state === State.Paused ||
-      state.state === State.Playing
+      state.state === State.Playing ||
+      (state.state === State.Paused && progress.position > 0)
     ) {
       if (trackProgress !== progress.position) {
-        console.log(`updating progress of ${trackId} to ${progress.position}`);
         const result = books.update(trackId, {
           status: "in_progress",
           progress: progress.position,
         });
 
-        console.log(result.status);
         setTrack(result);
       }
     }
   }, [trackProgress, trackId, state.state, progress.position]);
-
-  console.log(track?.progress);
 
   return (
     <PlayerContext.Provider

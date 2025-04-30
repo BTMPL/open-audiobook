@@ -43,10 +43,10 @@ const useAndStartPersister = (store: Store) =>
     (persister) =>
       persister.load().then(() => {
         persister.startAutoSave();
+        console.log("persiser loaded");
       }),
     [],
     (persister) => {
-      console.log("Persister detroying");
       persister.save();
       persister.stopAutoSave();
     }

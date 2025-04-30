@@ -27,6 +27,8 @@ export const MiniPlayer = () => {
     return () => {};
   }, [player.track]);
 
+  if (!player.track) return null;
+
   return (
     <View style={style.container}>
       <Pressable
