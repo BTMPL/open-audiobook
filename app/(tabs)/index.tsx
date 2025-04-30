@@ -9,16 +9,29 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-import { tracks } from "@/components/providers/player/PlayerProvider";
+import { Track, tracks } from "@/components/providers/player/PlayerProvider";
 import { useRouter } from "expo-router";
+import { useStore } from "@/components/providers/datbase/DatabaseProvider";
+import { useEffect, useState } from "react";
 
 export default function Index() {
   const spacing = 12;
   const router = useRouter();
+  const store = useStore<Track>("books");
+  const [books, setBooks] = useState<Track[]>(() => {
+    return Object.values(store.all());
+  });
+
+  useEffect(() => {
+    store.listenToTable((data) => {
+      setBooks(Object.values(data));
+    });
+  }, []);
+
   return (
     <FlatList
       numColumns={2}
-      data={tracks}
+      data={books}
       keyExtractor={(item, index) => index.toString()}
       renderItem={({ item, index }) => (
         <TouchableOpacity
