@@ -15,7 +15,7 @@ export type Chapter = {
 
 export type Track = {
   id: string;
-  url: string;
+  source: Source[];
   title: string;
   cover: string;
   synopsis: string;
@@ -23,9 +23,21 @@ export type Track = {
   chapters: Chapter[];
 };
 
-const track1 = {
+export type RemoteSource = {
+  sourceType: "remote";
+  url: string;
+};
+
+export type Source = RemoteSource;
+
+const track1: Track = {
   id: "1",
-  url: "http://127.0.0.1:8080/book.mp3",
+  source: [
+    {
+      sourceType: "remote",
+      url: "http://127.0.0.1:8080/book.mp3",
+    },
+  ],
   title: "Hyperion",
   cover: "http://127.0.0.1:8080/hyperion.jpg",
   synopsis:
@@ -112,7 +124,7 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
     TrackPlayer.setupPlayer();
   }, []);
   React.useEffect(() => {
-    TrackPlayer.add([track1]);
+    TrackPlayer.add([track1.source[0]]);
     setTrack(track1);
     return () => {
       TrackPlayer.stop();
