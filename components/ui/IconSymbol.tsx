@@ -32,14 +32,12 @@ export function IconSymbol({
   size = 24,
   color,
   style,
-  invertedColor = false,
 }: {
   name: IconSymbolName;
   size?: number;
   color?: string | OpaqueColorValue;
   style?: StyleProp<ViewStyle>;
   weight?: SymbolWeight;
-  invertedColor?: boolean;
 }) {
   return (
     <MaterialIcons

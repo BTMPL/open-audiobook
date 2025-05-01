@@ -1,4 +1,4 @@
-import { Alert, Image, Pressable, useColorScheme, View } from "react-native";
+import { Alert, Image, Pressable, View } from "react-native";
 import { Source, SourceType, Track } from "./providers/player/PlayerProvider";
 import { toHms } from "@/utils/time";
 import { ThemedText } from "./ThemedText";
@@ -7,6 +7,7 @@ import { IconSymbol } from "./ui/IconSymbol";
 import { useDownload } from "./providers/download/DownloadProvider";
 import { useStore } from "./providers/datbase/DatabaseProvider";
 import { useState } from "react";
+import { useColors } from "@/constants/Colors";
 
 export const Book = ({ item }: { item: Track }) => {
   return (
@@ -46,10 +47,11 @@ export const Book = ({ item }: { item: Track }) => {
 const Download = ({ book }: { book: Track }) => {
   const [progress, setProgress] = useState(-1);
   const download = useDownload();
-  const scheme = useColorScheme();
+
   const store = useStore<Track>("books");
-  const color = scheme === "light" ? "#000000" : "#FFFFFF";
-  const invertedColor = scheme === "light" ? "#FFFFFF" : "#000000";
+  const colors = useColors();
+  const colorsInverted = useColors({ invert: true });
+
   return (
     <Pressable
       onPress={() => {
@@ -149,12 +151,11 @@ const Download = ({ book }: { book: Track }) => {
         style={{
           width: 0,
           height: 0,
-          backgroundColor: "transparent",
           borderStyle: "solid",
           borderRightWidth: 40,
           borderTopWidth: 40,
           borderRightColor: "transparent",
-          borderTopColor: color,
+          borderTopColor: colorsInverted.background,
           position: "absolute",
           bottom: 0,
           right: 0,
@@ -173,7 +174,7 @@ const Download = ({ book }: { book: Track }) => {
           <ThemedText
             type="small"
             style={{
-              color: invertedColor,
+              color: colors.text,
             }}
           >
             {progress}%
@@ -182,8 +183,8 @@ const Download = ({ book }: { book: Track }) => {
       ) : (
         <IconSymbol
           name="arrow.down"
+          color={colorsInverted.icon}
           size={16}
-          invertedColor={true}
           style={{
             position: "absolute",
             bottom: 4,

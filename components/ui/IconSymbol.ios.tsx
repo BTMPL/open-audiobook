@@ -1,4 +1,4 @@
-import { useColorScheme } from "@/hooks/useColorScheme";
+import { useColors } from "@/constants/Colors";
 import { SymbolView, SymbolViewProps, SymbolWeight } from "expo-symbols";
 import { StyleProp, ViewStyle } from "react-native";
 
@@ -8,25 +8,18 @@ export function IconSymbol({
   color,
   style,
   weight = "regular",
-  invertedColor = false,
 }: {
   name: SymbolViewProps["name"];
   size?: number;
   color?: string;
   style?: StyleProp<ViewStyle>;
   weight?: SymbolWeight;
-  invertedColor?: boolean;
 }) {
-  const scheme = useColorScheme();
-  let iconColor = color;
-  if (!iconColor) {
-    iconColor =
-      scheme === (invertedColor ? "dark" : "light") ? "#000000" : "#FFFFFF";
-  }
+  const colors = useColors();
   return (
     <SymbolView
       weight={weight}
-      tintColor={iconColor}
+      tintColor={color || colors.icon}
       resizeMode="scaleAspectFit"
       name={name}
       style={[

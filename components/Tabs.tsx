@@ -1,5 +1,6 @@
 import { Pressable, ScrollView } from "react-native";
 import { ThemedText } from "./ThemedText";
+import { useColors } from "@/constants/Colors";
 
 type Props = {
   items: Array<{ id: string; label: string }>;
@@ -8,6 +9,7 @@ type Props = {
 };
 
 export const Tabs = ({ items, active, onChange }: Props) => {
+  const colors = useColors();
   return (
     <ScrollView
       style={{
@@ -26,7 +28,8 @@ export const Tabs = ({ items, active, onChange }: Props) => {
           style={{
             borderWidth: 2,
             borderRadius: 8,
-            borderColor: active === item.id ? "#ff0000" : "#ffffff",
+            borderColor:
+              active === item.id ? colors.accent : colors.borderColor,
             padding: 8,
           }}
         >

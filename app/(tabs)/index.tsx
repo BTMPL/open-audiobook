@@ -1,10 +1,4 @@
-import {
-  View,
-  FlatList,
-  Image,
-  TouchableOpacity,
-  useColorScheme,
-} from "react-native";
+import { View, FlatList, Image, TouchableOpacity } from "react-native";
 
 import { Track } from "@/components/providers/player/PlayerProvider";
 import { useRouter } from "expo-router";
@@ -12,6 +6,7 @@ import { useStore } from "@/components/providers/datbase/DatabaseProvider";
 import { useEffect, useState } from "react";
 import { ThemedText } from "@/components/ThemedText";
 import { getCoverUri } from "@/utils/getCoverUri";
+import { useColors } from "@/constants/Colors";
 
 export default function Index() {
   const spacing = 12;
@@ -27,7 +22,7 @@ export default function Index() {
     });
   }, []);
 
-  const scheme = useColorScheme();
+  const colors = useColors();
 
   return (
     <FlatList
@@ -42,7 +37,7 @@ export default function Index() {
             router.push(`/details/${item.id}`);
           }}
           style={{
-            backgroundColor: scheme === "light" ? "#e7e7e7" : "#2d2d2d",
+            backgroundColor: colors.modal,
             maxWidth: "50%",
             marginLeft: index % 2 ? spacing / 2 : 0,
             marginRight: index % 2 ? 0 : spacing / 2,

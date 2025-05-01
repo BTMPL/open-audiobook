@@ -7,10 +7,16 @@ import { State } from "react-native-track-player";
 import { ThemedText } from "../ThemedText";
 import { getCoverUri } from "@/utils/getCoverUri";
 import { IconSymbol } from "../ui/IconSymbol";
+import { useColorScheme } from "@/hooks/useColorScheme";
+import { Colors } from "@/constants/Colors";
 
 export const MiniPlayer = () => {
   const player = usePlayer();
   const router = useRouter();
+  const scheme = useColorScheme();
+
+  const backgroundColor = Colors[scheme || "light"].background;
+  const borderColor = Colors[scheme || "light"].borderColor;
 
   const position = player.progress.position || player.track?.progress || 0;
 
@@ -33,12 +39,12 @@ export const MiniPlayer = () => {
   if (!player.track) return null;
 
   return (
-    <View style={style.container}>
+    <View style={[style.container, { backgroundColor }]}>
       <Pressable onPress={() => player.track && router.push(`/player`)}>
         <View style={style.info}>
           <Image
             src={getCoverUri(player.track)}
-            style={{ width: 50, height: 50 }}
+            style={{ width: 60, height: 60 }}
           />
           <View>
             <ThemedText type="defaultSemiBold">
@@ -77,10 +83,6 @@ const style = StyleSheet.create({
   info: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 4,
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: "bold",
+    gap: 8,
   },
 });

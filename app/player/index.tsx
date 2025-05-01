@@ -1,12 +1,9 @@
-import { useState } from "react";
 import {
   Image,
   StyleSheet,
-  Text,
   View,
   Pressable,
   ScrollView,
-  Modal,
   Appearance,
 } from "react-native";
 
@@ -16,7 +13,6 @@ import Slider from "@react-native-community/slider";
 import { State } from "react-native-track-player";
 
 import {
-  Chapter,
   findChapter,
   usePlayer,
 } from "@/components/providers/player/PlayerProvider";
@@ -25,12 +21,12 @@ import { useRouter } from "expo-router";
 import { ThemedText } from "@/components/ThemedText";
 import { getCoverUri } from "@/utils/getCoverUri";
 import { IconSymbol } from "@/components/ui/IconSymbol";
+import { useColors } from "@/constants/Colors";
+import { Dropdown } from "@/components/Dropdown";
 
 export default function HomeScreen() {
   const player = usePlayer();
   const router = useRouter();
-
-  const [chapterModalVisible, setChapterModalVisible] = useState(false);
 
   const chapter = player.track
     ? findChapter(player.track.chapters, player.progress.position)
@@ -72,15 +68,28 @@ export default function HomeScreen() {
           <ThemedText>{player.track?.synopsis}</ThemedText>
         </ScrollView>
 
-        <Pressable
-          onPress={() => {
-            setChapterModalVisible(true);
-          }}
-        >
-          <ThemedText style={{ textAlign: "center" }}>
-            {chapter ? chapter.title : undefined}
-          </ThemedText>
-        </Pressable>
+        {chapter && player.track?.chapters && (
+          <Dropdown
+            placeholderStyle={{
+              flexDirection: "row",
+              justifyContent: "center",
+            }}
+            items={player.track?.chapters.map((item, index) => {
+              return {
+                id: index.toString(),
+                label: item.title,
+              };
+            })}
+            active={player.track?.chapters.indexOf(chapter).toString()}
+            onChange={async (chapIndex) => {
+              const chap = player.track?.chapters[parseInt(chapIndex)];
+              if (!chap) return;
+              await player.seekTo(chap.from);
+              player.play();
+            }}
+            prefix={<IconSymbol name="list.number" size={20} />}
+          />
+        )}
 
         <View style={style.navigation}>
           <Pressable
@@ -137,75 +146,6 @@ export default function HomeScreen() {
           <ThemedText>{left}</ThemedText>
         </View>
       </ParallaxScrollView>
-
-      <Modal
-        visible={chapterModalVisible}
-        transparent={true}
-        animationType="slide"
-        onDismiss={() => {
-          setChapterModalVisible(false);
-        }}
-      >
-        <View
-          style={{
-            flex: 1,
-            alignItems: "center",
-            justifyContent: "flex-end",
-            flexDirection: "column",
-          }}
-          onTouchStart={(event) => {
-            if (event.target === event.currentTarget) {
-              setChapterModalVisible(false);
-            }
-          }}
-        >
-          <ScrollView
-            style={{
-              width: "100%",
-              padding: 16,
-              backgroundColor: "#000000",
-              maxHeight: 300,
-            }}
-          >
-            <View style={{ gap: 8 }}>
-              {player.track?.chapters.map((chap: Chapter) => (
-                <Pressable
-                  key={chap.title}
-                  onPress={async () => {
-                    await player.seekTo(chap.from);
-                    player.play();
-                    setChapterModalVisible(false);
-                  }}
-                >
-                  <View
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      backgroundColor: "rgba(255, 255, 255, 0.1)",
-                      padding: 16,
-                      borderRadius: 8,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        color: "#ffffff",
-                        fontWeight: chapter === chap ? "bold" : "normal",
-                      }}
-                    >
-                      {chap.title}
-                    </Text>
-
-                    <Text style={{ color: "#ffffff" }}>
-                      {toHms(chap.to - chap.from)}
-                    </Text>
-                  </View>
-                </Pressable>
-              ))}
-            </View>
-          </ScrollView>
-        </View>
-      </Modal>
     </>
   );
 }
@@ -231,24 +171,6 @@ const style = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-  navigationButton: {
-    marginTop: 16,
-    fontSize: 16,
-    borderWidth: 1,
-    color: colorScheme === "dark" ? "#ffffff" : "#000000",
-    borderColor: colorScheme === "dark" ? "#ffffff" : "#000000",
-    borderRadius: "50%",
-    width: 48,
-    height: 48,
-    textAlign: "center",
-    lineHeight: 43,
-  },
-  playPause: {
-    fontSize: 36,
-    lineHeight: 50,
-    color: colorScheme === "dark" ? "#000000" : "#ffffff",
-    backgroundColor: colorScheme === "dark" ? "#ffffff" : "#000000",
-  },
   synopsisContainer: {
     height: 100,
   },
@@ -261,6 +183,6 @@ const slider =
         past: "#ff0000ff",
       }
     : {
-        track: "#ffffff77",
+        track: "#ffffff55",
         past: "#ff0000ff",
       };

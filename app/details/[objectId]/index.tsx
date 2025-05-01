@@ -18,7 +18,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { getCoverUri } from "@/utils/getCoverUri";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 
-export default function HomeScreen() {
+export default function Details() {
   const router = useRouter();
 
   const store = useStore<Track>("books");
