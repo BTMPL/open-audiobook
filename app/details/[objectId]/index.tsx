@@ -53,10 +53,6 @@ export default function HomeScreen() {
         <ScrollView style={style.synopsisContainer}>
           <ThemedText>{book.synopsis}</ThemedText>
         </ScrollView>
-
-        <Pressable>
-          <ThemedText>Download</ThemedText>
-        </Pressable>
       </ParallaxScrollView>
     </>
   );
@@ -77,14 +73,3 @@ const style = StyleSheet.create({
     height: 100,
   },
 });
-
-const slider =
-  colorScheme === "light"
-    ? {
-        track: "#00000077",
-        past: "#ff0000ff",
-      }
-    : {
-        track: "#ffffff77",
-        past: "#ff0000ff",
-      };
