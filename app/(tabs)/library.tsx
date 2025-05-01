@@ -54,35 +54,37 @@ export default function Library() {
 
   return (
     <SafeAreaView>
-      <Tabs items={tabs} active={tab} onChange={setTab} />
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          paddingBottom: 16,
-        }}
-      >
-        <ThemedText>
-          Results: {tabs.find((item) => item.id === tab)?.items?.length || 0}
-        </ThemedText>
-        <Dropdown items={order} active={orderBy} onChange={setOrderBy} />
+      <View style={{ padding: 16 }}>
+        <Tabs items={tabs} active={tab} onChange={setTab} />
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            paddingBottom: 16,
+          }}
+        >
+          <ThemedText>
+            Results: {tabs.find((item) => item.id === tab)?.items?.length || 0}
+          </ThemedText>
+          <Dropdown items={order} active={orderBy} onChange={setOrderBy} />
+        </View>
+        <FlatList
+          data={tabs.find((item) => item.id === tab)?.items}
+          contentContainerStyle={{ gap: 16 }}
+          renderItem={({ item }) => {
+            return (
+              <>
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  onPress={() => router.push(`/details/${item.id}`)}
+                >
+                  <Book item={item} />
+                </TouchableOpacity>
+              </>
+            );
+          }}
+        />
       </View>
-      <FlatList
-        data={tabs.find((item) => item.id === tab)?.items}
-        contentContainerStyle={{ gap: 16 }}
-        renderItem={({ item }) => {
-          return (
-            <>
-              <TouchableOpacity
-                activeOpacity={0.8}
-                onPress={() => router.push(`/details/${item.id}`)}
-              >
-                <Book item={item} />
-              </TouchableOpacity>
-            </>
-          );
-        }}
-      />
     </SafeAreaView>
   );
 }

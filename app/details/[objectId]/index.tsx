@@ -310,9 +310,9 @@ const style = StyleSheet.create({
   },
   navigationButton: {
     marginTop: 16,
-    color: colorScheme === "dark" ? "#ffffff" : "#000000",
     fontSize: 16,
     borderWidth: 1,
+    color: colorScheme === "dark" ? "#ffffff" : "#000000",
     borderColor: colorScheme === "dark" ? "#ffffff" : "#000000",
     borderRadius: "50%",
     width: 48,
@@ -323,8 +323,8 @@ const style = StyleSheet.create({
   playPause: {
     fontSize: 36,
     lineHeight: 50,
-    backgroundColor: colorScheme === "dark" ? "#ffffff" : "#000000",
     color: colorScheme === "dark" ? "#000000" : "#ffffff",
+    backgroundColor: colorScheme === "dark" ? "#ffffff" : "#000000",
   },
   synopsisContainer: {
     height: 100,

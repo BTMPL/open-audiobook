@@ -1,4 +1,10 @@
-import { View, FlatList, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  useColorScheme,
+} from "react-native";
 
 import { Track } from "@/components/providers/player/PlayerProvider";
 import { useRouter } from "expo-router";
@@ -21,6 +27,8 @@ export default function Index() {
     });
   }, []);
 
+  const scheme = useColorScheme();
+
   return (
     <FlatList
       numColumns={2}
@@ -34,7 +42,7 @@ export default function Index() {
             router.push(`/details/${item.id}`);
           }}
           style={{
-            backgroundColor: "#2d2d2d",
+            backgroundColor: scheme === "light" ? "#e7e7e7" : "#2d2d2d",
             maxWidth: "50%",
             marginLeft: index % 2 ? spacing / 2 : 0,
             marginRight: index % 2 ? 0 : spacing / 2,
