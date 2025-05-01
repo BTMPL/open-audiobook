@@ -1,4 +1,5 @@
 import { Book } from "@/components/Book";
+import { Dropdown } from "@/components/Dropdown";
 import { useStore } from "@/components/providers/datbase/DatabaseProvider";
 import { Track } from "@/components/providers/player/PlayerProvider";
 import { Tabs } from "@/components/Tabs";
@@ -16,6 +17,7 @@ import {
 
 export default function Library() {
   const [tab, setTab] = useState("all");
+  const [orderBy, setOrderBy] = useState("activity");
   const router = useRouter();
   const store = useStore<Track>("books");
   const [books, setBooks] = useState<Track[]>(() => {
@@ -41,9 +43,29 @@ export default function Library() {
     { id: "finished", label: "Finished", item: finished },
   ];
 
+  const order = [
+    { id: "activity", label: "Recent activity" },
+    { id: "duration-descending", label: "Length - longest to shortest" },
+    { id: "duration-ascending", label: "Length - shortest to longest" },
+    { id: "alpha-ascending", label: "Alphabetical - A to Z" },
+    { id: "alpha-descending", label: "Alphabetical - Z to A" },
+  ];
+
   return (
     <SafeAreaView>
       <Tabs items={tabs} active={tab} onChange={setTab} />
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          paddingBottom: 16,
+        }}
+      >
+        <Text style={{ color: "#ffffff" }}>
+          Results: {tabs.find((item) => item.id === tab)?.items?.length || 0}
+        </Text>
+        <Dropdown items={order} active={orderBy} onChange={setOrderBy} />
+      </View>
       <FlatList
         data={tabs.find((item) => item.id === tab)?.items}
         contentContainerStyle={{ gap: 16 }}
