@@ -15,6 +15,9 @@ export default function Layout() {
         <TabTrigger style={styles.tabTrigger} name="home" href="/">
           <Text style={{ color: "#ffffff" }}>Home</Text>
         </TabTrigger>
+        <TabTrigger style={styles.tabTrigger} name="library" href="/library">
+          <Text style={{ color: "#ffffff" }}>Library</Text>
+        </TabTrigger>
         <TabTrigger style={styles.tabTrigger} name="profile" href="/profile">
           <Text style={{ color: "#ffffff" }}>Profile</Text>
         </TabTrigger>
