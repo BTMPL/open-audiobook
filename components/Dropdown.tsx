@@ -2,16 +2,25 @@ import { useState } from "react";
 import { View, Modal, Pressable, ScrollView } from "react-native";
 import { ThemedText } from "./ThemedText";
 type Props = {
-  items: Array<{ id: string; label: string }>;
+  items: Array<{ id: string; label: string; icon?: JSX.Element }>;
   active: string;
   onChange: (id: string) => void;
+  prefix?: JSX.Element;
 };
-export const Dropdown = ({ items, active, onChange }: Props) => {
+export const Dropdown = ({ items, active, onChange, prefix }: Props) => {
   const [open, setOpen] = useState(false);
   return (
     <>
       <View>
-        <Pressable onPress={() => setOpen(true)}>
+        <Pressable
+          onPress={() => setOpen(true)}
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 4,
+          }}
+        >
+          {prefix || items.find((items) => items.id === active)?.icon}
           <ThemedText>
             {items.find((items) => items.id === active)?.label}
           </ThemedText>
@@ -49,8 +58,12 @@ export const Dropdown = ({ items, active, onChange }: Props) => {
                 style={{
                   padding: 16,
                   backgroundColor: item.id === active ? "#ff0000" : "#ffffff",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 4,
                 }}
               >
+                {item.icon}
                 <ThemedText
                   style={{ color: item.id === active ? "#ffffff" : "#000000" }}
                 >

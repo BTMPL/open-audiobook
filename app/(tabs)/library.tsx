@@ -4,6 +4,7 @@ import { useStore } from "@/components/providers/datbase/DatabaseProvider";
 import { Track } from "@/components/providers/player/PlayerProvider";
 import { Tabs } from "@/components/Tabs";
 import { ThemedText } from "@/components/ThemedText";
+import { IconSymbol } from "@/components/ui/IconSymbol";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 
@@ -45,11 +46,31 @@ export default function Library() {
   ];
 
   const order = [
-    { id: "activity", label: "Recent activity" },
-    { id: "duration-descending", label: "Length - longest to shortest" },
-    { id: "duration-ascending", label: "Length - shortest to longest" },
-    { id: "alpha-ascending", label: "Alphabetical - A to Z" },
-    { id: "alpha-descending", label: "Alphabetical - Z to A" },
+    {
+      id: "activity",
+      label: "Recent activity",
+      icon: <IconSymbol name="clock" size={16} />,
+    },
+    {
+      id: "duration-descending",
+      label: "Length - longest to shortest",
+      icon: <IconSymbol name="clock" size={16} />,
+    },
+    {
+      id: "duration-ascending",
+      label: "Length - shortest to longest",
+      icon: <IconSymbol name="clock" size={16} />,
+    },
+    {
+      id: "alpha-ascending",
+      label: "Alphabetical - A to Z",
+      icon: <IconSymbol name="textformat.size" size={16} />,
+    },
+    {
+      id: "alpha-descending",
+      label: "Alphabetical - Z to A",
+      icon: <IconSymbol name="textformat.size" size={16} />,
+    },
   ];
 
   const orderFunction = (a: Track, b: Track) => {
@@ -66,7 +87,7 @@ export default function Library() {
         return b.title.localeCompare(a.title);
     }
 
-    return 0;
+    return b.lastPlayedAt - a.lastPlayedAt;
   };
 
   return (
@@ -83,7 +104,12 @@ export default function Library() {
           <ThemedText>
             Results: {tabs.find((item) => item.id === tab)?.items?.length || 0}
           </ThemedText>
-          <Dropdown items={order} active={orderBy} onChange={setOrderBy} />
+          <Dropdown
+            items={order}
+            active={orderBy}
+            onChange={setOrderBy}
+            prefix={<IconSymbol name="arrow.up.arrow.down.square" size={16} />}
+          />
         </View>
         <FlatList
           data={[...(tabs.find((item) => item.id === tab)?.items || [])].sort(

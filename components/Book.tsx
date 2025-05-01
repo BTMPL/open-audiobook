@@ -29,7 +29,14 @@ export const Book = ({ item }: { item: Track }) => {
           <ThemedText type="compact">{toHms(item.duration)}</ThemedText>
         </View>
         <View>
-          <ThemedText>?</ThemedText>
+          <ThemedText>
+            <Pressable onPress={() => {}}>
+              <IconSymbol name="play.circle" size={28} weight="light" />
+            </Pressable>
+            <Pressable onPress={() => {}}>
+              <IconSymbol name="slider.horizontal.3" size={28} weight="light" />
+            </Pressable>
+          </ThemedText>
         </View>
       </View>
     </View>
