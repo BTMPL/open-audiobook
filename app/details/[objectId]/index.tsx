@@ -9,21 +9,18 @@ import {
 
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 
-import {
-  Source,
-  SourceType,
-  Track,
-} from "@/components/providers/player/PlayerProvider";
+import { Track } from "@/components/providers/player/PlayerProvider";
 
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useDownload } from "@/components/providers/download/DownloadProvider";
+
 import { useStore } from "@/components/providers/datbase/DatabaseProvider";
 import { ThemedText } from "@/components/ThemedText";
 import { getCoverUri } from "@/utils/getCoverUri";
+import { IconSymbol } from "@/components/ui/IconSymbol";
 
 export default function HomeScreen() {
   const router = useRouter();
-  const download = useDownload();
+
   const store = useStore<Track>("books");
   const params = useLocalSearchParams();
 
@@ -43,7 +40,7 @@ export default function HomeScreen() {
                 router.back();
               }}
             >
-              <ThemedText>??</ThemedText>
+              <IconSymbol name="chevron.down.circle.fill" size={32} />
             </Pressable>
           </View>
         }
@@ -57,75 +54,7 @@ export default function HomeScreen() {
           <ThemedText>{book.synopsis}</ThemedText>
         </ScrollView>
 
-        <Pressable
-          onPress={() => {
-            if (!book) return;
-            const url = book.source.remote?.url;
-            if (!url) return;
-            const prom: Promise<Record<string, string>>[] = [];
-            prom.push(
-              new Promise((resolve, reject) => {
-                if (!book?.id) reject("No track");
-                download.start(
-                  url,
-                  `${book!.id}.mp3`,
-                  (percentage, done, uri) => {
-                    if (done) {
-                      if (uri) resolve({ url: uri });
-                      else reject("Resource download failed");
-                    }
-                  }
-                );
-              })
-            );
-            prom.push(
-              new Promise((resolve, reject) => {
-                if (!book?.id) reject("No track");
-                download.start(
-                  book!.cover,
-                  `${book!.id}.${book!.cover.split(".").pop()}`,
-                  (percentage, done, uri) => {
-                    if (done) {
-                      if (uri) {
-                        resolve({ cover: uri });
-                      } else reject("Cover download failed");
-                    }
-                  }
-                );
-              })
-            );
-
-            Promise.all(prom)
-              .then((values) => {
-                if (!book?.source) return;
-                const partial = values.reduce((acc, value) => {
-                  return { ...acc, ...value };
-                }, {});
-
-                store.update(book.id, {
-                  source: Object.entries(book.source).reduce(
-                    (acc, [key, value]) => {
-                      if (key === "local") return acc;
-                      acc[key as SourceType] = {
-                        ...value,
-                        current: false,
-                      };
-                      return acc;
-                    },
-                    {
-                      local: {
-                        ...partial,
-                        current: true,
-                      },
-                    } as Record<SourceType, Source>
-                  ),
-                });
-              })
-              .catch((err) => {
-                console.error(err);
-              });
-          }}
-        >
+        <Pressable>
           <ThemedText>Download</ThemedText>
         </Pressable>
       </ParallaxScrollView>

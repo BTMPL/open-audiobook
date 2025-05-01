@@ -24,6 +24,7 @@ import { toHms } from "@/utils/time";
 import { useRouter } from "expo-router";
 import { ThemedText } from "@/components/ThemedText";
 import { getCoverUri } from "@/utils/getCoverUri";
+import { IconSymbol } from "@/components/ui/IconSymbol";
 
 export default function HomeScreen() {
   const player = usePlayer();
@@ -55,7 +56,7 @@ export default function HomeScreen() {
                 router.back();
               }}
             >
-              <ThemedText>??</ThemedText>
+              <IconSymbol name="chevron.down.circle.fill" size={32} />
             </Pressable>
           </View>
         }
@@ -87,7 +88,7 @@ export default function HomeScreen() {
               player.seekBy(-30);
             }}
           >
-            <Text style={style.navigationButton}>-30</Text>
+            <IconSymbol name="gobackward.30" size={48} weight={"light"} />
           </Pressable>
 
           {player.state === State.Playing ? (
@@ -96,7 +97,7 @@ export default function HomeScreen() {
                 player.pause();
               }}
             >
-              <Text style={[style.navigationButton, style.playPause]}>⏸︎</Text>
+              <IconSymbol name="pause.circle" size={64} weight={"light"} />
             </Pressable>
           ) : (
             <Pressable
@@ -104,7 +105,7 @@ export default function HomeScreen() {
                 player.play();
               }}
             >
-              <Text style={[style.navigationButton, style.playPause]}>⏵︎</Text>
+              <IconSymbol name="play.circle" size={64} weight={"light"} />
             </Pressable>
           )}
 
@@ -113,7 +114,7 @@ export default function HomeScreen() {
               player.seekBy(30);
             }}
           >
-            <Text style={style.navigationButton}>+30</Text>
+            <IconSymbol name="goforward.30" size={48} weight={"light"} />
           </Pressable>
         </View>
         <Slider
@@ -228,6 +229,7 @@ const style = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
   },
   navigationButton: {
     marginTop: 16,

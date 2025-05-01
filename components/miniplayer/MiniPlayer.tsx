@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { State } from "react-native-track-player";
 import { ThemedText } from "../ThemedText";
 import { getCoverUri } from "@/utils/getCoverUri";
+import { IconSymbol } from "../ui/IconSymbol";
 
 export const MiniPlayer = () => {
   const player = usePlayer();
@@ -52,9 +53,13 @@ export const MiniPlayer = () => {
       </Pressable>
       <View>
         {player.state === "playing" ? (
-          <ThemedText onPress={() => player.pause()}>Pause</ThemedText>
+          <Pressable onPress={() => player.pause()}>
+            <IconSymbol name="pause.circle" size={32} weight={"light"} />
+          </Pressable>
         ) : (
-          <ThemedText onPress={() => player.play()}>Play</ThemedText>
+          <Pressable onPress={() => player.play()}>
+            <IconSymbol name="play.circle" size={32} weight={"light"} />
+          </Pressable>
         )}
       </View>
     </View>
