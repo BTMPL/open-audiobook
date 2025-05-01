@@ -141,8 +141,6 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
   const books = useStore<Track>("books");
   const state = usePlaybackState();
 
-  console.log(track);
-
   useEffect(() => {
     TrackPlayer.setupPlayer();
 
