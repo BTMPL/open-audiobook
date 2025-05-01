@@ -49,6 +49,7 @@ export default function RootLayout() {
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
               <Stack.Screen name="+not-found" />
               <Stack.Screen name="details" options={{ headerShown: false }} />
+              <Stack.Screen name="player" options={{ headerShown: false }} />
             </Stack>
             <StatusBar style="auto" />
           </PlayerProvider>

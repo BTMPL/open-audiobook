@@ -1,56 +1,37 @@
-import { useState } from "react";
 import {
   Image,
   StyleSheet,
-  Text,
   View,
   Pressable,
   ScrollView,
-  Modal,
   Appearance,
 } from "react-native";
 
 import ParallaxScrollView from "@/components/ParallaxScrollView";
-import Slider from "@react-native-community/slider";
-
-import { State } from "react-native-track-player";
 
 import {
-  Chapter,
-  findChapter,
   Source,
   SourceType,
   Track,
-  usePlayer,
 } from "@/components/providers/player/PlayerProvider";
-import { toHms } from "@/utils/time";
-import { useRouter } from "expo-router";
+
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useDownload } from "@/components/providers/download/DownloadProvider";
 import { useStore } from "@/components/providers/datbase/DatabaseProvider";
 import { ThemedText } from "@/components/ThemedText";
 import { getCoverUri } from "@/utils/getCoverUri";
 
 export default function HomeScreen() {
-  const player = usePlayer();
   const router = useRouter();
   const download = useDownload();
   const store = useStore<Track>("books");
+  const params = useLocalSearchParams();
 
-  const [chapterModalVisible, setChapterModalVisible] = useState(false);
+  const book = store.byId(params.objectId as string);
 
-  const chapter = player.track
-    ? findChapter(player.track.chapters, player.progress.position)
-    : undefined;
-  const positionInChapter = chapter
-    ? player.progress.position - chapter.from
-    : 0;
-
-  const played = toHms(positionInChapter);
-  const left = chapter ? toHms(chapter.to - positionInChapter) : 0;
-
-  const percentage = chapter
-    ? (positionInChapter / (chapter.to - chapter.from)) * 100
-    : 0;
+  if (!book) {
+    return router.push("/");
+  }
 
   return (
     <>
@@ -67,29 +48,27 @@ export default function HomeScreen() {
           </View>
         }
         headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
-        headerImage={
-          <Image src={getCoverUri(player.track)} style={style.cover} />
-        }
+        headerImage={<Image src={getCoverUri(book)} style={style.cover} />}
       >
         <ThemedText type="title" style={{ textAlign: "center" }}>
-          {player.track?.title}
+          {book.title}
         </ThemedText>
         <ScrollView style={style.synopsisContainer}>
-          <ThemedText>{player.track?.synopsis}</ThemedText>
+          <ThemedText>{book.synopsis}</ThemedText>
         </ScrollView>
 
         <Pressable
           onPress={() => {
-            if (!player.track) return;
-            const url = player.track.source.remote?.url;
+            if (!book) return;
+            const url = book.source.remote?.url;
             if (!url) return;
             const prom: Promise<Record<string, string>>[] = [];
             prom.push(
               new Promise((resolve, reject) => {
-                if (!player.track?.id) reject("No track");
+                if (!book?.id) reject("No track");
                 download.start(
                   url,
-                  `${player.track!.id}.mp3`,
+                  `${book!.id}.mp3`,
                   (percentage, done, uri) => {
                     if (done) {
                       if (uri) resolve({ url: uri });
@@ -101,10 +80,10 @@ export default function HomeScreen() {
             );
             prom.push(
               new Promise((resolve, reject) => {
-                if (!player.track?.id) reject("No track");
+                if (!book?.id) reject("No track");
                 download.start(
-                  player.track!.cover,
-                  `${player.track!.id}.${player.track!.cover.split(".").pop()}`,
+                  book!.cover,
+                  `${book!.id}.${book!.cover.split(".").pop()}`,
                   (percentage, done, uri) => {
                     if (done) {
                       if (uri) {
@@ -118,13 +97,13 @@ export default function HomeScreen() {
 
             Promise.all(prom)
               .then((values) => {
-                if (!player.track?.source) return;
+                if (!book?.source) return;
                 const partial = values.reduce((acc, value) => {
                   return { ...acc, ...value };
                 }, {});
 
-                store.update(player.track.id, {
-                  source: Object.entries(player.track.source).reduce(
+                store.update(book.id, {
+                  source: Object.entries(book.source).reduce(
                     (acc, [key, value]) => {
                       if (key === "local") return acc;
                       acc[key as SourceType] = {
@@ -149,141 +128,7 @@ export default function HomeScreen() {
         >
           <ThemedText>Download</ThemedText>
         </Pressable>
-
-        <Pressable
-          onPress={() => {
-            setChapterModalVisible(true);
-          }}
-        >
-          <ThemedText style={{ textAlign: "center" }}>
-            {chapter ? chapter.title : undefined}
-          </ThemedText>
-        </Pressable>
-
-        <View style={style.navigation}>
-          <Pressable
-            onPress={() => {
-              player.seekBy(-30);
-            }}
-          >
-            <Text style={style.navigationButton}>-30</Text>
-          </Pressable>
-
-          {player.state === State.Playing ? (
-            <Pressable
-              onPress={() => {
-                player.pause();
-              }}
-            >
-              <Text style={[style.navigationButton, style.playPause]}>⏸︎</Text>
-            </Pressable>
-          ) : (
-            <Pressable
-              onPress={() => {
-                player.play();
-              }}
-            >
-              <Text style={[style.navigationButton, style.playPause]}>⏵︎</Text>
-            </Pressable>
-          )}
-
-          <Pressable
-            onPress={() => {
-              player.seekBy(30);
-            }}
-          >
-            <Text style={style.navigationButton}>+30</Text>
-          </Pressable>
-        </View>
-        <Slider
-          style={{}}
-          value={percentage}
-          minimumValue={0}
-          maximumValue={100}
-          minimumTrackTintColor={slider.past}
-          maximumTrackTintColor={slider.track}
-          tapToSeek={true}
-          onSlidingComplete={(value) => {
-            chapter &&
-              player.seekTo(
-                chapter.from + (value / 100) * (chapter.to - chapter.from)
-              );
-          }}
-        />
-        <View style={style.timer}>
-          <ThemedText>{played}</ThemedText>
-          <ThemedText>{left}</ThemedText>
-        </View>
       </ParallaxScrollView>
-
-      <Modal
-        visible={chapterModalVisible}
-        transparent={true}
-        animationType="slide"
-        onDismiss={() => {
-          setChapterModalVisible(false);
-        }}
-      >
-        <View
-          style={{
-            flex: 1,
-            alignItems: "center",
-            justifyContent: "flex-end",
-            flexDirection: "column",
-          }}
-          onTouchStart={(event) => {
-            if (event.target === event.currentTarget) {
-              setChapterModalVisible(false);
-            }
-          }}
-        >
-          <ScrollView
-            style={{
-              width: "100%",
-              padding: 16,
-              backgroundColor: "#000000",
-              maxHeight: 300,
-            }}
-          >
-            <View style={{ gap: 8 }}>
-              {player.track?.chapters.map((chap: Chapter) => (
-                <Pressable
-                  key={chap.title}
-                  onPress={async () => {
-                    await player.seekTo(chap.from);
-                    player.play();
-                    setChapterModalVisible(false);
-                  }}
-                >
-                  <View
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      backgroundColor: "rgba(255, 255, 255, 0.1)",
-                      padding: 16,
-                      borderRadius: 8,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        color: "#ffffff",
-                        fontWeight: chapter === chap ? "bold" : "normal",
-                      }}
-                    >
-                      {chap.title}
-                    </Text>
-
-                    <Text style={{ color: "#ffffff" }}>
-                      {toHms(chap.to - chap.from)}
-                    </Text>
-                  </View>
-                </Pressable>
-              ))}
-            </View>
-          </ScrollView>
-        </View>
-      </Modal>
     </>
   );
 }
@@ -298,34 +143,7 @@ const style = StyleSheet.create({
     left: 0,
     position: "absolute",
   },
-  timer: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  navigation: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  navigationButton: {
-    marginTop: 16,
-    fontSize: 16,
-    borderWidth: 1,
-    color: colorScheme === "dark" ? "#ffffff" : "#000000",
-    borderColor: colorScheme === "dark" ? "#ffffff" : "#000000",
-    borderRadius: "50%",
-    width: 48,
-    height: 48,
-    textAlign: "center",
-    lineHeight: 43,
-  },
-  playPause: {
-    fontSize: 36,
-    lineHeight: 50,
-    color: colorScheme === "dark" ? "#000000" : "#ffffff",
-    backgroundColor: colorScheme === "dark" ? "#ffffff" : "#000000",
-  },
+
   synopsisContainer: {
     height: 100,
   },

@@ -33,11 +33,7 @@ export const MiniPlayer = () => {
 
   return (
     <View style={style.container}>
-      <Pressable
-        onPress={() =>
-          player.track && router.push(`/details/${player.track.id}`)
-        }
-      >
+      <Pressable onPress={() => player.track && router.push(`/player`)}>
         <View style={style.info}>
           <Image
             src={getCoverUri(player.track)}
