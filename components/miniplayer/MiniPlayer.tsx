@@ -5,6 +5,7 @@ import { useRouter } from "expo-router";
 import { useEffect } from "react";
 import { State } from "react-native-track-player";
 import { ThemedText } from "../ThemedText";
+import { getCoverUri } from "@/utils/getCoverUri";
 
 export const MiniPlayer = () => {
   const player = usePlayer();
@@ -38,7 +39,10 @@ export const MiniPlayer = () => {
         }
       >
         <View style={style.info}>
-          <Image src={player.track?.cover} style={{ width: 50, height: 50 }} />
+          <Image
+            src={getCoverUri(player.track)}
+            style={{ width: 50, height: 50 }}
+          />
           <View>
             <ThemedText type="defaultSemiBold">
               {player.track?.title}

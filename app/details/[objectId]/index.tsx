@@ -28,6 +28,7 @@ import { useRouter } from "expo-router";
 import { useDownload } from "@/components/providers/download/DownloadProvider";
 import { useStore } from "@/components/providers/datbase/DatabaseProvider";
 import { ThemedText } from "@/components/ThemedText";
+import { getCoverUri } from "@/utils/getCoverUri";
 
 export default function HomeScreen() {
   const player = usePlayer();
@@ -66,7 +67,9 @@ export default function HomeScreen() {
           </View>
         }
         headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
-        headerImage={<Image src={player.track?.cover} style={style.cover} />}
+        headerImage={
+          <Image src={getCoverUri(player.track)} style={style.cover} />
+        }
       >
         <ThemedText type="title" style={{ textAlign: "center" }}>
           {player.track?.title}
@@ -80,9 +83,46 @@ export default function HomeScreen() {
             if (!player.track) return;
             const url = player.track.source.remote?.url;
             if (!url) return;
-            download.start(url, `${player.track.id}.mp3`, (percentage, uri) => {
-              console.log("Download percentage: ", percentage, uri);
-              if (uri && player.track?.id) {
+            const prom: Promise<Record<string, string>>[] = [];
+            prom.push(
+              new Promise((resolve, reject) => {
+                if (!player.track?.id) reject("No track");
+                download.start(
+                  url,
+                  `${player.track!.id}.mp3`,
+                  (percentage, done, uri) => {
+                    if (done) {
+                      if (uri) resolve({ url: uri });
+                      else reject("Resource download failed");
+                    }
+                  }
+                );
+              })
+            );
+            prom.push(
+              new Promise((resolve, reject) => {
+                if (!player.track?.id) reject("No track");
+                download.start(
+                  player.track!.cover,
+                  `${player.track!.id}.${player.track!.cover.split(".").pop()}`,
+                  (percentage, done, uri) => {
+                    if (done) {
+                      if (uri) {
+                        resolve({ cover: uri });
+                      } else reject("Cover download failed");
+                    }
+                  }
+                );
+              })
+            );
+
+            Promise.all(prom)
+              .then((values) => {
+                if (!player.track?.source) return;
+                const partial = values.reduce((acc, value) => {
+                  return { ...acc, ...value };
+                }, {});
+
                 store.update(player.track.id, {
                   source: Object.entries(player.track.source).reduce(
                     (acc, [key, value]) => {
@@ -95,14 +135,16 @@ export default function HomeScreen() {
                     },
                     {
                       local: {
-                        url: uri,
+                        ...partial,
                         current: true,
                       },
                     } as Record<SourceType, Source>
                   ),
                 });
-              }
-            });
+              })
+              .catch((err) => {
+                console.error(err);
+              });
           }}
         >
           <ThemedText>Download</ThemedText>

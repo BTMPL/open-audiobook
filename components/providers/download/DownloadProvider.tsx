@@ -8,13 +8,13 @@ const DownloadContext = React.createContext<{
   start: (
     url: string,
     fileName: string,
-    callback: (percentage: number, uri?: string) => void
+    callback: (percentage: number, done: boolean, uri?: string) => void
   ) => {
     pause: () => Promise<void>;
   };
   resume: (
     url: string,
-    callback: (percentage: number, uri?: string) => void
+    callback: (percentage: number, done: boolean, uri?: string) => void
   ) => Promise<string | undefined>;
 }>({
   start: () => {
@@ -43,24 +43,29 @@ export const DownloadProvider = ({
       start: (
         url: string,
         fileName: string,
-        callback: (percentage: number, uri?: string) => void
+        callback: (percentage: number, done: boolean, uri?: string) => void
       ) => {
-        const downloadResumable = FileSystem.createDownloadResumable(
-          url,
-          FileSystem.documentDirectory + fileName,
-          {},
-          (progress) => {
-            const percentage = Math.round(
-              (progress.totalBytesWritten /
-                progress.totalBytesExpectedToWrite) *
-                100
-            );
-            callback(percentage);
-          }
-        );
+        let downloadResumable: FileSystem.DownloadResumable;
+        FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + "files/", {
+          intermediates: true,
+        }).then(() => {
+          downloadResumable = FileSystem.createDownloadResumable(
+            url,
+            FileSystem.documentDirectory + "files/" + fileName,
+            {},
+            (progress) => {
+              const percentage = Math.round(
+                (progress.totalBytesWritten /
+                  progress.totalBytesExpectedToWrite) *
+                  100
+              );
+              callback(percentage, false);
+            }
+          );
 
-        downloadResumable.downloadAsync().then((result) => {
-          if (result) callback(100, result.uri);
+          downloadResumable.downloadAsync().then((result) => {
+            if (result) callback(100, true, result.uri);
+          });
         });
 
         return {
@@ -76,7 +81,7 @@ export const DownloadProvider = ({
 
       resume: async (
         url: string,
-        callback: (percentage: number, uri?: string) => void
+        callback: (percentage: number, done: boolean, uri?: string) => void
       ): Promise<string | undefined> => {
         const downloadSnapshotJson = store.getString(`pausedDownload.${url}`);
         if (!downloadSnapshotJson) {
@@ -94,13 +99,13 @@ export const DownloadProvider = ({
                 progress.totalBytesExpectedToWrite) *
                 100
             );
-            callback(percentage);
+            callback(percentage, false);
           },
           downloadSnapshot.resumeData
         );
 
         downloadResumable.resumeAsync().then((result) => {
-          if (result) callback(100, result.uri);
+          if (result) callback(100, true, result.uri);
         });
       },
     }),

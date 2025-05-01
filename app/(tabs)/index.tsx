@@ -5,6 +5,7 @@ import { useRouter } from "expo-router";
 import { useStore } from "@/components/providers/datbase/DatabaseProvider";
 import { useEffect, useState } from "react";
 import { ThemedText } from "@/components/ThemedText";
+import { getCoverUri } from "@/utils/getCoverUri";
 
 export default function Index() {
   const spacing = 12;
@@ -52,7 +53,7 @@ export default function Index() {
             }}
           >
             <Image
-              src={item.cover}
+              src={getCoverUri(item)}
               style={{
                 aspectRatio: 0.5622,
                 resizeMode: "contain",

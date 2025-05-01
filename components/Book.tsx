@@ -2,11 +2,12 @@ import { Image, View } from "react-native";
 import { Track } from "./providers/player/PlayerProvider";
 import { toHms } from "@/utils/time";
 import { ThemedText } from "./ThemedText";
+import { getCoverUri } from "@/utils/getCoverUri";
 
 export const Book = ({ item }: { item: Track }) => {
   return (
     <View style={{ flexDirection: "row", gap: 8, alignItems: "center" }}>
-      <Image src={item.cover} style={{ width: 60, height: 60 }} />
+      <Image src={getCoverUri(item)} style={{ width: 60, height: 60 }} />
       <View
         style={{
           flex: 1,

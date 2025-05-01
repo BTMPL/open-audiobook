@@ -39,6 +39,7 @@ export type RemoteSource = {
 
 export type LocalSource = {
   url: string;
+  cover?: string;
 };
 
 export type Source = {
@@ -62,7 +63,7 @@ const track1: Track = {
   synopsis:
     "The novel begins with the Consul receiving a message from Hegemony CEO Meina Gladstone that he is to return to the planet Hyperion as a member of the Shrike Pilgrimage. It is explained that the Time Tombs on Hyperion appear to be opening and an Ouster fleet is approaching the system, although their intentions are unknown. Gladstone also explains that one of the pilgrims is suspected to be an agent of the Ousters, but they don't know which one. The Consul is to meet up with the Templar tree ship Yggdrasill along with the other pilgrims on his journey to the Outback planet. ",
   duration: 8 * 60 * 60 + 25 * 60 + 19,
-  progress: 1,
+  progress: 0,
   chapters: [
     { from: 0, to: 2 * 60 + 7, title: "Book info" },
     { from: 2 * 60 + 7 + 1, to: 13 * 60 + 9, title: "Prologue" },
@@ -146,7 +147,12 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 
     books.byId$("1", (book) => {
       const loadTrack = Object.values(book.source).find((s) => s.current);
-      if (loadTrack) TrackPlayer.add([loadTrack]);
+      // FIXME: this should be only called when we actually change the track / source
+      if (loadTrack) {
+        TrackPlayer.add([loadTrack]).catch((e) => {
+          console.log("Error adding track", e);
+        });
+      }
       setTrack(book);
     });
     return () => {
