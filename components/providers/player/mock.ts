@@ -1,0 +1,212 @@
+import { Track } from "./PlayerProvider";
+
+export const track2: Track = {
+  id: "2",
+  source: {
+    remote: {
+      current: true,
+      url: "http://127.0.0.1:8080/fal-of-hyperion-1.mp3",
+    },
+  },
+  title: "Fall of Hyperion (1 / 2)",
+  addedAt: Date.now(),
+  lastPlayedAt: Date.now(),
+  status: "not_started",
+  cover: "http://127.0.0.1:8080/fall-of-hyperion.jpg",
+  authors: ["Dan Simmons"],
+  synopsis: "",
+  duration: 9 * 3600 + 35 * 60 + 41,
+  progress: 0,
+  chapters: [
+    {
+      from: 0 * 3600 + 0 * 60 + 0,
+      to: 0 * 3600 + 2 * 60 + 14,
+      title: "(i) Book info",
+    },
+    {
+      from: 0 * 3600 + 2 * 60 + 14,
+      to: 0 * 3600 + 17 * 60 + 32,
+      title: "(01)",
+    },
+    {
+      from: 0 * 3600 + 17 * 60 + 32,
+      to: 0 * 3600 + 38 * 60 + 11,
+      title: "(02)",
+    },
+    {
+      from: 0 * 3600 + 38 * 60 + 11,
+      to: 1 * 3600 + 2 * 60 + 43,
+      title: "(03)",
+    },
+    {
+      from: 1 * 3600 + 2 * 60 + 43,
+      to: 1 * 3600 + 27 * 60 + 52,
+      title: "(04)",
+    },
+    {
+      from: 1 * 3600 + 27 * 60 + 52,
+      to: 1 * 3600 + 38 * 60 + 10,
+      title: "(05)",
+    },
+    {
+      from: 1 * 3600 + 38 * 60 + 10,
+      to: 1 * 3600 + 55 * 60 + 16,
+      title: "(06)",
+    },
+    {
+      from: 1 * 3600 + 55 * 60 + 16,
+      to: 2 * 3600 + 15 * 60 + 4,
+      title: "(07)",
+    },
+    { from: 2 * 3600 + 15 * 60 + 4, to: 2 * 3600 + 37 * 60 + 5, title: "(08)" },
+    { from: 2 * 3600 + 37 * 60 + 5, to: 3 * 3600 + 3 * 60 + 35, title: "(09)" },
+    { from: 3 * 3600 + 3 * 60 + 35, to: 3 * 3600 + 7 * 60 + 37, title: "(10)" },
+    {
+      from: 3 * 3600 + 7 * 60 + 37,
+      to: 3 * 3600 + 35 * 60 + 23,
+      title: "(11)",
+    },
+    {
+      from: 3 * 3600 + 35 * 60 + 23,
+      to: 3 * 3600 + 40 * 60 + 8,
+      title: "(12)",
+    },
+    {
+      from: 3 * 3600 + 40 * 60 + 8,
+      to: 3 * 3600 + 52 * 60 + 15,
+      title: "(13)",
+    },
+    {
+      from: 3 * 3600 + 52 * 60 + 15,
+      to: 4 * 3600 + 15 * 60 + 58,
+      title: "(14)",
+    },
+    {
+      from: 4 * 3600 + 15 * 60 + 58,
+      to: 4 * 3600 + 46 * 60 + 5,
+      title: "(15)",
+    },
+    { from: 4 * 3600 + 46 * 60 + 5, to: 5 * 3600 + 9 * 60 + 16, title: "(16)" },
+    {
+      from: 5 * 3600 + 9 * 60 + 16,
+      to: 5 * 3600 + 24 * 60 + 33,
+      title: "(17)",
+    },
+    {
+      from: 5 * 3600 + 24 * 60 + 33,
+      to: 5 * 3600 + 56 * 60 + 27,
+      title: "(18)",
+    },
+    {
+      from: 5 * 3600 + 56 * 60 + 27,
+      to: 6 * 3600 + 10 * 60 + 28,
+      title: "(19)",
+    },
+    {
+      from: 6 * 3600 + 10 * 60 + 28,
+      to: 6 * 3600 + 22 * 60 + 34,
+      title: "(20)",
+    },
+    {
+      from: 6 * 3600 + 22 * 60 + 34,
+      to: 6 * 3600 + 35 * 60 + 36,
+      title: "(21)",
+    },
+    {
+      from: 6 * 3600 + 35 * 60 + 36,
+      to: 6 * 3600 + 52 * 60 + 10,
+      title: "(22)",
+    },
+    {
+      from: 6 * 3600 + 52 * 60 + 10,
+      to: 7 * 3600 + 2 * 60 + 23,
+      title: "(23)",
+    },
+    { from: 7 * 3600 + 2 * 60 + 23, to: 7 * 3600 + 24 * 60 + 8, title: "(24)" },
+    {
+      from: 7 * 3600 + 24 * 60 + 8,
+      to: 7 * 3600 + 47 * 60 + 31,
+      title: "(25)",
+    },
+    {
+      from: 7 * 3600 + 47 * 60 + 31,
+      to: 7 * 3600 + 56 * 60 + 14,
+      title: "(26)",
+    },
+    {
+      from: 7 * 3600 + 56 * 60 + 14,
+      to: 8 * 3600 + 3 * 60 + 39,
+      title: "(27)",
+    },
+    {
+      from: 8 * 3600 + 3 * 60 + 39,
+      to: 8 * 3600 + 28 * 60 + 20,
+      title: "(28)",
+    },
+    {
+      from: 8 * 3600 + 28 * 60 + 20,
+      to: 8 * 3600 + 57 * 60 + 11,
+      title: "(29)",
+    },
+    {
+      from: 8 * 3600 + 57 * 60 + 11,
+      to: 9 * 3600 + 13 * 60 + 36,
+      title: "(30)",
+    },
+    {
+      from: 9 * 3600 + 13 * 60 + 36,
+      to: 9 * 3600 + 35 * 60 + 41,
+      title: "(31)",
+    },
+  ],
+};
+
+export const track1: Track = {
+  id: "1",
+  source: {
+    remote: {
+      current: true,
+      url: "http://127.0.0.1:8080/book.mp3",
+    },
+  },
+  title: "Hyperion",
+  cover: "http://127.0.0.1:8080/hyperion.jpg",
+  addedAt: Date.now(),
+  lastPlayedAt: Date.now(),
+  status: "not_started",
+  authors: ["Dan Simmons"],
+  synopsis:
+    "The novel begins with the Consul receiving a message from Hegemony CEO Meina Gladstone that he is to return to the planet Hyperion as a member of the Shrike Pilgrimage. It is explained that the Time Tombs on Hyperion appear to be opening and an Ouster fleet is approaching the system, although their intentions are unknown. Gladstone also explains that one of the pilgrims is suspected to be an agent of the Ousters, but they don't know which one. The Consul is to meet up with the Templar tree ship Yggdrasill along with the other pilgrims on his journey to the Outback planet. ",
+  duration: 8 * 60 * 60 + 25 * 60 + 19,
+  progress: 0,
+  chapters: [
+    { from: 0, to: 2 * 60 + 7, title: "Book info" },
+    { from: 2 * 60 + 7 + 1, to: 13 * 60 + 9, title: "Prologue" },
+    { from: 13 * 60 + 9, to: 48 * 60 + 21, title: "Hyperion 01" },
+    {
+      from: 48 * 60 + 21 + 1,
+      to: 3 * 60 * 60 + 35 * 60 + 35,
+      title: "The Priest`s Tale",
+    },
+    {
+      from: 3 * 60 * 60 + 35 * 60 + 35 + 1,
+      to: 4 * 60 * 60 + 14 * 60 + 22,
+      title: "Hyperion 02",
+    },
+    {
+      from: 4 * 60 * 60 + 14 * 60 + 22 + 1,
+      to: 6 * 60 * 60 + 14 * 60 + 33,
+      title: "The Soldier`s Tale",
+    },
+    {
+      from: 6 * 60 * 60 + 14 * 60 + 33 + 1,
+      to: 6 * 60 * 60 + 19 * 60 + 47,
+      title: "Hyperion 03",
+    },
+    {
+      from: 6 * 60 * 60 + 19 * 60 + 47 + 1,
+      to: 8 * 60 * 60 + 25 * 60 + 19,
+      title: "The Poet`s Tale",
+    },
+  ],
+};
