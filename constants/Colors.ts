@@ -15,7 +15,7 @@ export const Colors = {
     modal: "rgb(200, 200, 200)",
     tint: tintColorLight,
     accent: "rgba(247, 129, 25, 1)",
-    icon: "#687076", // needs to be hex for IconSymbol
+    icon: "#6d6d6d", // needs to be hex for IconSymbol
     tabIconDefault: "rgba(104, 112, 118, 1)'",
     tabIconSelected: tintColorLight,
     borderColor: "rgba(237, 237, 237, 1)",
