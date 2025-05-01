@@ -52,6 +52,23 @@ export default function Library() {
     { id: "alpha-descending", label: "Alphabetical - Z to A" },
   ];
 
+  const orderFunction = (a: Track, b: Track) => {
+    switch (orderBy) {
+      case "activity":
+        return b.lastPlayedAt - a.lastPlayedAt;
+      case "duration-descending":
+        return b.duration - a.duration;
+      case "duration-ascending":
+        return a.duration - b.duration;
+      case "alpha-ascending":
+        return a.title.localeCompare(b.title);
+      case "alpha-descending":
+        return b.title.localeCompare(a.title);
+    }
+
+    return 0;
+  };
+
   return (
     <SafeAreaView>
       <View style={{ padding: 16 }}>
@@ -69,7 +86,9 @@ export default function Library() {
           <Dropdown items={order} active={orderBy} onChange={setOrderBy} />
         </View>
         <FlatList
-          data={tabs.find((item) => item.id === tab)?.items}
+          data={[...(tabs.find((item) => item.id === tab)?.items || [])].sort(
+            orderFunction
+          )}
           contentContainerStyle={{ gap: 16 }}
           renderItem={({ item }) => {
             return (

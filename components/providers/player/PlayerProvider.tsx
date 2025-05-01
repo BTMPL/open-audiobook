@@ -124,6 +124,7 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
         const result = books.update(trackId, {
           status: "in_progress",
           progress: progress.position,
+          lastPlayedAt: Date.now(),
         });
 
         setTrack(result);
