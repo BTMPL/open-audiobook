@@ -1,6 +1,7 @@
-import { Image, View, Text } from "react-native";
+import { Image, View } from "react-native";
 import { Track } from "./providers/player/PlayerProvider";
 import { toHms } from "@/utils/time";
+import { ThemedText } from "./ThemedText";
 
 export const Book = ({ item }: { item: Track }) => {
   return (
@@ -15,12 +16,12 @@ export const Book = ({ item }: { item: Track }) => {
         }}
       >
         <View style={{ gap: 4 }}>
-          <Text style={{ color: "#ffffff" }}>{item.title}</Text>
-          <Text style={{ color: "#ffffff" }}>{item.authors.join(", ")}</Text>
-          <Text style={{ color: "#ffffff" }}>{toHms(item.duration)}</Text>
+          <ThemedText type="compact">{item.title}</ThemedText>
+          <ThemedText type="compact">{item.authors.join(", ")}</ThemedText>
+          <ThemedText type="compact">{toHms(item.duration)}</ThemedText>
         </View>
         <View>
-          <Text style={{ color: "#ffffff" }}>?</Text>
+          <ThemedText>?</ThemedText>
         </View>
       </View>
     </View>

@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { View, Text, Modal, Pressable, ScrollView } from "react-native";
+import { View, Modal, Pressable, ScrollView } from "react-native";
+import { ThemedText } from "./ThemedText";
 type Props = {
   items: Array<{ id: string; label: string }>;
   active: string;
@@ -11,9 +12,9 @@ export const Dropdown = ({ items, active, onChange }: Props) => {
     <>
       <View>
         <Pressable onPress={() => setOpen(true)}>
-          <Text style={{ color: "#ffffff" }}>
+          <ThemedText>
             {items.find((items) => items.id === active)?.label}
-          </Text>
+          </ThemedText>
         </Pressable>
       </View>
       <Modal visible={open} animationType="slide" transparent={true}>
@@ -50,11 +51,11 @@ export const Dropdown = ({ items, active, onChange }: Props) => {
                   backgroundColor: item.id === active ? "#ff0000" : "#ffffff",
                 }}
               >
-                <Text
+                <ThemedText
                   style={{ color: item.id === active ? "#ffffff" : "#000000" }}
                 >
                   {item.label}
-                </Text>
+                </ThemedText>
               </Pressable>
             ))}
           </ScrollView>

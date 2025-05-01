@@ -2,14 +2,11 @@ import { useState } from "react";
 import {
   Image,
   StyleSheet,
-  Platform,
   Text,
-  Button,
   View,
   Pressable,
   ScrollView,
   Modal,
-  Touchable,
   Appearance,
 } from "react-native";
 
@@ -30,6 +27,7 @@ import { toHms } from "@/utils/time";
 import { useRouter } from "expo-router";
 import { useDownload } from "@/components/providers/download/DownloadProvider";
 import { useStore } from "@/components/providers/datbase/DatabaseProvider";
+import { ThemedText } from "@/components/ThemedText";
 
 export default function HomeScreen() {
   const player = usePlayer();
@@ -63,16 +61,18 @@ export default function HomeScreen() {
                 router.back();
               }}
             >
-              <Text>??</Text>
+              <ThemedText>??</ThemedText>
             </Pressable>
           </View>
         }
         headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
         headerImage={<Image src={player.track?.cover} style={style.cover} />}
       >
-        <Text style={style.title}>{player.track?.title}</Text>
+        <ThemedText type="title" style={{ textAlign: "center" }}>
+          {player.track?.title}
+        </ThemedText>
         <ScrollView style={style.synopsisContainer}>
-          <Text style={style.synopsis}>{player.track?.synopsis}</Text>
+          <ThemedText>{player.track?.synopsis}</ThemedText>
         </ScrollView>
 
         <Pressable
@@ -105,7 +105,7 @@ export default function HomeScreen() {
             });
           }}
         >
-          <Text>Download</Text>
+          <ThemedText>Download</ThemedText>
         </Pressable>
 
         <Pressable
@@ -113,9 +113,9 @@ export default function HomeScreen() {
             setChapterModalVisible(true);
           }}
         >
-          <Text style={style.chapter}>
+          <ThemedText style={{ textAlign: "center" }}>
             {chapter ? chapter.title : undefined}
-          </Text>
+          </ThemedText>
         </Pressable>
 
         <View style={style.navigation}>
@@ -169,9 +169,8 @@ export default function HomeScreen() {
           }}
         />
         <View style={style.timer}>
-          <Text style={style.timerValues}>{played}</Text>
-
-          <Text style={style.timerValues}>{left}</Text>
+          <ThemedText>{played}</ThemedText>
+          <ThemedText>{left}</ThemedText>
         </View>
       </ParallaxScrollView>
 
@@ -257,17 +256,10 @@ const style = StyleSheet.create({
     left: 0,
     position: "absolute",
   },
-  chapter: {
-    color: colorScheme === "dark" ? "#fff" : "#000",
-    textAlign: "center",
-  },
   timer: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-  },
-  timerValues: {
-    color: colorScheme === "dark" ? "#fff" : "#000",
   },
   navigation: {
     display: "flex",
@@ -292,17 +284,8 @@ const style = StyleSheet.create({
     backgroundColor: colorScheme === "dark" ? "#ffffff" : "#000000",
     color: colorScheme === "dark" ? "#000000" : "#ffffff",
   },
-  title: {
-    textAlign: "center",
-    fontSize: 24,
-    fontWeight: "bold",
-    color: colorScheme === "dark" ? "#fff" : "#000",
-  },
   synopsisContainer: {
     height: 100,
-  },
-  synopsis: {
-    color: colorScheme === "dark" ? "#fff" : "#000",
   },
 });
 

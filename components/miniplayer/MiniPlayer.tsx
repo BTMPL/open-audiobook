@@ -1,9 +1,10 @@
-import { View, Text, Image, StyleSheet, Pressable } from "react-native";
+import { View, Image, StyleSheet, Pressable } from "react-native";
 import { findChapter, usePlayer } from "../providers/player/PlayerProvider";
 import { toHms } from "@/utils/time";
 import { useRouter } from "expo-router";
 import { useEffect } from "react";
 import { State } from "react-native-track-player";
+import { ThemedText } from "../ThemedText";
 
 export const MiniPlayer = () => {
   const player = usePlayer();
@@ -39,23 +40,21 @@ export const MiniPlayer = () => {
         <View style={style.info}>
           <Image src={player.track?.cover} style={{ width: 50, height: 50 }} />
           <View>
-            <Text style={[style.title, style.text]}>{player.track?.title}</Text>
-            <Text style={[style.text]}>
+            <ThemedText type="defaultSemiBold">
+              {player.track?.title}
+            </ThemedText>
+            <ThemedText type="compact">
               {chapter && chapter.title} - ({toHms(position, true)}/
               {toHms(player.track?.duration, true)})
-            </Text>
+            </ThemedText>
           </View>
         </View>
       </Pressable>
       <View>
         {player.state === "playing" ? (
-          <Text style={[style.text]} onPress={() => player.pause()}>
-            Pause
-          </Text>
+          <ThemedText onPress={() => player.pause()}>Pause</ThemedText>
         ) : (
-          <Text style={[style.text]} onPress={() => player.play()}>
-            Play
-          </Text>
+          <ThemedText onPress={() => player.play()}>Play</ThemedText>
         )}
       </View>
     </View>
@@ -63,9 +62,6 @@ export const MiniPlayer = () => {
 };
 
 const style = StyleSheet.create({
-  text: {
-    color: "#ffffff",
-  },
   container: {
     flexDirection: "row",
     alignItems: "center",

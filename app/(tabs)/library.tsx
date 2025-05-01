@@ -3,6 +3,7 @@ import { Dropdown } from "@/components/Dropdown";
 import { useStore } from "@/components/providers/datbase/DatabaseProvider";
 import { Track } from "@/components/providers/player/PlayerProvider";
 import { Tabs } from "@/components/Tabs";
+import { ThemedText } from "@/components/ThemedText";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 
@@ -61,9 +62,9 @@ export default function Library() {
           paddingBottom: 16,
         }}
       >
-        <Text style={{ color: "#ffffff" }}>
+        <ThemedText>
           Results: {tabs.find((item) => item.id === tab)?.items?.length || 0}
-        </Text>
+        </ThemedText>
         <Dropdown items={order} active={orderBy} onChange={setOrderBy} />
       </View>
       <FlatList

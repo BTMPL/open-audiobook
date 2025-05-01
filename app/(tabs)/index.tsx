@@ -1,18 +1,10 @@
-import {
-  View,
-  Text,
-  ScrollView,
-  FlatList,
-  ImageBackground,
-  Image,
-  Pressable,
-  TouchableOpacity,
-} from "react-native";
+import { View, FlatList, Image, TouchableOpacity } from "react-native";
 
-import { Track, tracks } from "@/components/providers/player/PlayerProvider";
+import { Track } from "@/components/providers/player/PlayerProvider";
 import { useRouter } from "expo-router";
 import { useStore } from "@/components/providers/datbase/DatabaseProvider";
 import { useEffect, useState } from "react";
+import { ThemedText } from "@/components/ThemedText";
 
 export default function Index() {
   const spacing = 12;
@@ -69,7 +61,7 @@ export default function Index() {
           </View>
 
           <View style={{ flex: 1, justifyContent: "center", padding: 8 }}>
-            <Text style={{ color: "#ffffff" }}>{item.title}</Text>
+            <ThemedText>{item.title}</ThemedText>
           </View>
         </TouchableOpacity>
       )}

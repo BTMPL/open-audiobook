@@ -1,6 +1,7 @@
-import { Text, StyleSheet, View, ScrollView } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Tabs, TabList, TabTrigger, TabSlot } from "expo-router/ui";
 import { MiniPlayer } from "@/components/miniplayer/MiniPlayer";
+import { ThemedText } from "@/components/ThemedText";
 
 export default function Layout() {
   return (
@@ -13,13 +14,13 @@ export default function Layout() {
       </View>
       <TabList style={styles.tabs}>
         <TabTrigger style={styles.tabTrigger} name="home" href="/">
-          <Text style={{ color: "#ffffff" }}>Home</Text>
+          <ThemedText>Home</ThemedText>
         </TabTrigger>
         <TabTrigger style={styles.tabTrigger} name="library" href="/library">
-          <Text style={{ color: "#ffffff" }}>Library</Text>
+          <ThemedText>Library</ThemedText>
         </TabTrigger>
         <TabTrigger style={styles.tabTrigger} name="profile" href="/profile">
-          <Text style={{ color: "#ffffff" }}>Profile</Text>
+          <ThemedText>Profile</ThemedText>
         </TabTrigger>
       </TabList>
     </Tabs>

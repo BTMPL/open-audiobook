@@ -1,4 +1,5 @@
-import { Pressable, View, Text, ScrollView } from "react-native";
+import { Pressable, ScrollView } from "react-native";
+import { ThemedText } from "./ThemedText";
 
 type Props = {
   items: Array<{ id: string; label: string }>;
@@ -29,7 +30,7 @@ export const Tabs = ({ items, active, onChange }: Props) => {
             padding: 8,
           }}
         >
-          <Text style={{ color: "#ffffff" }}>{item.label}</Text>
+          <ThemedText>{item.label}</ThemedText>
         </Pressable>
       ))}
     </ScrollView>
