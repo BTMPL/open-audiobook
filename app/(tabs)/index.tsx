@@ -17,7 +17,7 @@ export default function Index() {
   });
 
   useEffect(() => {
-    store.all$((data) => {
+    return store.all$((data) => {
       setBooks(Object.values(data));
     });
   }, []);

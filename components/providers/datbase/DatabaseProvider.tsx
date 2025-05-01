@@ -77,11 +77,13 @@ const Model = <T extends StoreableObject>(table: StoreName, store: Store) => {
     return undefined;
   };
 
-  const byId$ = (id: string, callback: (data: T) => void) => {
-    store.addRowListener(table, id, (store, tableId) => {
+  const byId$ = (id: string, callback: (data: T) => void): (() => void) => {
+    const Id = store.addRowListener(table, id, (store, tableId) => {
       const data = unserialize(store.getRow(table, id));
       if (data?.id) return callback(data as T);
     });
+
+    return () => store.delListener(Id);
   };
   const all = (): Record<T["id"], T> =>
     Object.entries(store.getTable(table)).reduce((acc, [key, value]) => {
@@ -89,10 +91,12 @@ const Model = <T extends StoreableObject>(table: StoreName, store: Store) => {
       return acc;
     }, {} as Record<string, Record<keyof T, any>>);
 
-  const all$ = (callback: (all: Record<T["id"], T>) => void) => {
-    store.addTableListener(table, (store, tableId) => {
+  const all$ = (callback: (all: Record<T["id"], T>) => void): (() => void) => {
+    const Id = store.addTableListener(table, (store, tableId) => {
       return callback(all());
     });
+
+    return () => store.delListener(Id);
   };
 
   return {

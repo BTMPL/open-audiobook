@@ -87,6 +87,7 @@ export const PlayerContext = React.createContext<{
 });
 
 export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
+  const [bookId, setBookId] = React.useState<string | undefined>("1");
   const [track, setTrack] = React.useState<Track | undefined>();
 
   const progress = useProgress();
@@ -95,23 +96,29 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     TrackPlayer.setupPlayer();
-
-    books.byId$("1", (book) => {
-      const loadTrack = Object.values(book.source).find((s) => s.current);
-      // FIXME: this should be only called when we actually change the track / source
-      if (loadTrack) {
-        TrackPlayer.add([loadTrack]).catch((e) => {
-          console.log("Error adding track", e);
-        });
-      }
-      setTrack(book);
-    });
     return () => {
       TrackPlayer.stop();
     };
   }, []);
 
+  useEffect(() => {
+    if (!bookId) return;
+    return books.byId$(bookId, (book) => {
+      setTrack(book);
+    });
+  }, [bookId]);
+
   const { id: trackId, progress: trackProgress } = track || {};
+
+  useEffect(() => {
+    // FIXME: this should be only called when we actually change the track / source
+    if (!track) return;
+    const loadTrack = Object.values(track.source).find((s) => s.current);
+    if (!loadTrack) return;
+    TrackPlayer.add([loadTrack]).catch((e) => {
+      console.log("Error adding track", e);
+    });
+  }, [trackId]);
 
   // track progress, this can be debounced
   useEffect(() => {

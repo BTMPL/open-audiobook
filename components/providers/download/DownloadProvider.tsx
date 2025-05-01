@@ -2,7 +2,9 @@ import * as FileSystem from "expo-file-system";
 import React from "react";
 import { MMKV } from "react-native-mmkv";
 
-const store = new MMKV();
+const store = new MMKV({
+  id: "downloader",
+});
 
 const DownloadContext = React.createContext<{
   start: (

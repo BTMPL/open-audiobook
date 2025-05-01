@@ -32,7 +32,7 @@ export default function Library() {
   const finished = books.filter((book) => book.status === "finished");
 
   useEffect(() => {
-    store.all$((data) => {
+    return store.all$((data) => {
       setBooks(Object.values(data));
     });
   }, []);
