@@ -121,7 +121,7 @@ export default function Library() {
               <>
                 <TouchableOpacity
                   activeOpacity={0.8}
-                  onPress={() => router.push(`/details/${item.id}`)}
+                  onPress={() => router.push(`/library/${item.id}`)}
                 >
                   <Book item={item} />
                 </TouchableOpacity>

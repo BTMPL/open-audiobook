@@ -42,7 +42,11 @@ export default function Details() {
           <View>
             <Pressable
               onPress={() => {
-                router.back();
+                if (router.canDismiss()) {
+                  router.dismissAll();
+                } else {
+                  router.back();
+                }
               }}
             >
               <IconSymbol name="chevron.down.circle.fill" size={32} />

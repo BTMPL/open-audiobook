@@ -48,15 +48,13 @@ export default function RootLayout() {
           >
             <PlayerProvider>
               <Stack>
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                <Stack.Screen name="+not-found" />
                 <Stack.Screen
-                  name="details"
+                  name="(tabs)"
                   options={{
                     headerShown: false,
-                    animation: "slide_from_bottom",
                   }}
                 />
+                <Stack.Screen name="+not-found" />
                 <Stack.Screen
                   name="player"
                   options={{

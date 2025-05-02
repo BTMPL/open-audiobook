@@ -39,7 +39,7 @@ export default function Index() {
             activeOpacity={0.8}
             key={index}
             onPress={() => {
-              router.push(`/details/${item.id}`);
+              router.push(`/library/${item.id}`);
             }}
             style={{
               backgroundColor: colors.modal,

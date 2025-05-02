@@ -1,10 +1,15 @@
 import { useStore } from "@/components/providers/datbase/DatabaseProvider";
 import { Track, tracks } from "@/components/providers/player/PlayerProvider";
 import { ThemedText } from "@/components/ThemedText";
+import { useEffect } from "react";
 import { SafeAreaView, ScrollView, TouchableOpacity } from "react-native";
 
 export default function Profile() {
   const store = useStore<Track>("books");
+
+  useEffect(() => {
+    return () => console.log("unmount");
+  }, []);
 
   return (
     <SafeAreaView>
