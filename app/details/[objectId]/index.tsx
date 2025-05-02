@@ -9,7 +9,7 @@ import {
 
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 
-import { Track } from "@/components/providers/player/PlayerProvider";
+import { Track, usePlayer } from "@/components/providers/player/PlayerProvider";
 
 import { useLocalSearchParams, useRouter } from "expo-router";
 
@@ -17,12 +17,16 @@ import { useStore } from "@/components/providers/datbase/DatabaseProvider";
 import { ThemedText } from "@/components/ThemedText";
 import { getCoverUri } from "@/utils/getCoverUri";
 import { IconSymbol } from "@/components/ui/IconSymbol";
+import { AppState } from "@/components/providers/app/AppProvider";
 
 export default function Details() {
   const router = useRouter();
 
   const store = useStore<Track>("books");
   const params = useLocalSearchParams();
+
+  const app = useStore<AppState>("appState");
+  const player = usePlayer();
 
   const book = store.byId(params.objectId as string);
 
@@ -53,6 +57,18 @@ export default function Details() {
         <ScrollView style={style.synopsisContainer}>
           <ThemedText>{book.synopsis}</ThemedText>
         </ScrollView>
+        <Pressable
+          onPress={() => {
+            app.update("appState", {
+              track: book.id,
+            });
+
+            const track = Object.values(book.source).find((s) => s.current);
+            if (track) player.add(track, { playOnLoad: true });
+          }}
+        >
+          <IconSymbol name="play.circle" size={48} weight="light" />
+        </Pressable>
       </ParallaxScrollView>
     </>
   );

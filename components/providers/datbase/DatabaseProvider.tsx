@@ -22,7 +22,7 @@ export const DatabaseProvider = ({ children, store }: Props) => {
 
   useEffect(() => {
     data?.load().then(() => {
-      setReady(true);
+      setTimeout(() => setReady(true));
     });
   }, [data]);
 
@@ -51,7 +51,7 @@ const useAndStartPersister = (store: Store) =>
     }
   );
 
-export type StoreName = "books";
+export type StoreName = "books" | "appState";
 
 type StoreableObject = { id: string } & Object;
 

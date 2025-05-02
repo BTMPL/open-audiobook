@@ -16,7 +16,6 @@ export const MiniPlayer = () => {
   const scheme = useColorScheme();
 
   const backgroundColor = Colors[scheme || "light"].background;
-  const borderColor = Colors[scheme || "light"].borderColor;
 
   const position = player.progress.position || player.track?.progress || 0;
 

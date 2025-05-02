@@ -1,6 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import TrackPlayer, {
+  AddTrack,
+  Event,
+  PlaybackState,
   Progress,
   State,
   usePlaybackState,
@@ -8,6 +11,7 @@ import TrackPlayer, {
 } from "react-native-track-player";
 import { useStore } from "../datbase/DatabaseProvider";
 import { track1, track2 } from "./mock";
+import { AppState } from "../app/AppProvider";
 
 export type Chapter = {
   from: number;
@@ -63,7 +67,10 @@ export function findChapter(chapters: Chapter[], currentTime: number): Chapter {
 export const PlayerContext = React.createContext<{
   progress: Progress;
   track: Track | undefined;
-  add: typeof TrackPlayer.add;
+  add: (
+    tracks: AddTrack,
+    options?: { playOnLoad?: boolean }
+  ) => Promise<number | void>;
   seekBy: (position: number) => Promise<void>;
   seekTo: (position: number) => Promise<void>;
   stop: () => Promise<void>;
@@ -87,7 +94,11 @@ export const PlayerContext = React.createContext<{
 });
 
 export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
-  const [bookId, setBookId] = React.useState<string | undefined>("1");
+  const appState = useStore<AppState>("appState");
+
+  const [bookId, setBookId] = React.useState<string | undefined>(
+    appState.byId("appState")?.track
+  );
   const [track, setTrack] = React.useState<Track | undefined>();
 
   const progress = useProgress();
@@ -95,14 +106,20 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
   const state = usePlaybackState();
 
   useEffect(() => {
+    const unsub = appState.byId$("appState", (state) => {
+      setBookId(state.track);
+    });
+
     TrackPlayer.setupPlayer();
     return () => {
       TrackPlayer.stop();
+      unsub();
     };
   }, []);
 
   useEffect(() => {
     if (!bookId) return;
+    setTrack(books.byId(bookId));
     return books.byId$(bookId, (book) => {
       setTrack(book);
     });
@@ -143,7 +160,27 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
     <PlayerContext.Provider
       value={{
         progress,
-        add: TrackPlayer.add,
+        add: (track: AddTrack, options = {}) => {
+          TrackPlayer.stop();
+          if (options.playOnLoad) {
+            const playbackWhenReady = (data: any) => {
+              console.log(data);
+            };
+            TrackPlayer.addEventListener(
+              Event.PlaybackActiveTrackChanged,
+              playbackWhenReady
+            );
+          }
+          console.log({ tracks });
+          const queue = TrackPlayer.load(track).then((queue) => {
+            if (options.playOnLoad) {
+              TrackPlayer.play();
+            }
+            return queue;
+          });
+
+          return queue;
+        },
         seekBy: TrackPlayer.seekBy,
         seekTo: TrackPlayer.seekTo,
         stop: TrackPlayer.stop,

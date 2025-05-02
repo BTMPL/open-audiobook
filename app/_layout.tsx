@@ -16,6 +16,7 @@ import { useCreateStore } from "tinybase/ui-react";
 import { createStore } from "tinybase/store";
 import { DatabaseProvider } from "@/components/providers/datbase/DatabaseProvider";
 import { DownloadProvider } from "@/components/providers/download/DownloadProvider";
+import { AppProvider } from "@/components/providers/app/AppProvider";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -40,27 +41,35 @@ export default function RootLayout() {
 
   return (
     <DatabaseProvider store={store}>
-      <DownloadProvider>
-        <ThemeProvider
-          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-        >
-          <PlayerProvider>
-            <Stack>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen name="+not-found" />
-              <Stack.Screen
-                name="details"
-                options={{ headerShown: false, animation: "slide_from_bottom" }}
-              />
-              <Stack.Screen
-                name="player"
-                options={{ headerShown: false, animation: "slide_from_bottom" }}
-              />
-            </Stack>
-            <StatusBar style="auto" />
-          </PlayerProvider>
-        </ThemeProvider>
-      </DownloadProvider>
+      <AppProvider>
+        <DownloadProvider>
+          <ThemeProvider
+            value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+          >
+            <PlayerProvider>
+              <Stack>
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen name="+not-found" />
+                <Stack.Screen
+                  name="details"
+                  options={{
+                    headerShown: false,
+                    animation: "slide_from_bottom",
+                  }}
+                />
+                <Stack.Screen
+                  name="player"
+                  options={{
+                    headerShown: false,
+                    animation: "slide_from_bottom",
+                  }}
+                />
+              </Stack>
+              <StatusBar style="auto" />
+            </PlayerProvider>
+          </ThemeProvider>
+        </DownloadProvider>
+      </AppProvider>
     </DatabaseProvider>
   );
 }
