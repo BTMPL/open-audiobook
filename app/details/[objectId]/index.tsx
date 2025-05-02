@@ -18,6 +18,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { getCoverUri } from "@/utils/getCoverUri";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 import { AppState } from "@/components/providers/app/AppProvider";
+import { Button } from "@/components/ui/Button";
 
 export default function Details() {
   const router = useRouter();
@@ -57,7 +58,7 @@ export default function Details() {
         <ScrollView style={style.synopsisContainer}>
           <ThemedText>{book.synopsis}</ThemedText>
         </ScrollView>
-        <Pressable
+        <Button
           onPress={() => {
             app.update("appState", {
               track: book.id,
@@ -66,9 +67,10 @@ export default function Details() {
             const track = Object.values(book.source).find((s) => s.current);
             if (track) player.add(track, { playOnLoad: true });
           }}
+          label="Play"
         >
-          <IconSymbol name="play.circle" size={48} weight="light" />
-        </Pressable>
+          <IconSymbol name="play.circle" size={16} weight="light" />
+        </Button>
       </ParallaxScrollView>
     </>
   );

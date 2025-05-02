@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { ThemedText } from "@/components/ThemedText";
 import { getCoverUri } from "@/utils/getCoverUri";
 import { useColors } from "@/constants/Colors";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
   const spacing = 12;
@@ -25,50 +26,55 @@ export default function Index() {
   const colors = useColors();
 
   return (
-    <FlatList
-      numColumns={2}
-      data={books}
-      keyExtractor={(item, index) => index.toString()}
-      renderItem={({ item, index }) => (
-        <TouchableOpacity
-          activeOpacity={0.8}
-          key={index}
-          onPress={() => {
-            router.push(`/details/${item.id}`);
-          }}
-          style={{
-            backgroundColor: colors.modal,
-            maxWidth: "50%",
-            marginLeft: index % 2 ? spacing / 2 : 0,
-            marginRight: index % 2 ? 0 : spacing / 2,
-            marginBottom: spacing,
-            height: 300,
-
-            display: "flex",
-            flex: 1,
-            flexDirection: "column",
-          }}
-        >
-          <View
+    <SafeAreaView>
+      <FlatList
+        numColumns={2}
+        data={books}
+        keyExtractor={(item, index) => index.toString()}
+        contentContainerStyle={{
+          padding: spacing,
+        }}
+        renderItem={({ item, index }) => (
+          <TouchableOpacity
+            activeOpacity={0.8}
+            key={index}
+            onPress={() => {
+              router.push(`/details/${item.id}`);
+            }}
             style={{
-              overflow: "hidden",
-              height: 250,
+              backgroundColor: colors.modal,
+              maxWidth: "50%",
+              marginLeft: index % 2 ? spacing / 2 : 0,
+              marginRight: index % 2 ? 0 : spacing / 2,
+              marginBottom: spacing,
+              height: 300,
+
+              display: "flex",
+              flex: 1,
+              flexDirection: "column",
             }}
           >
-            <Image
-              src={getCoverUri(item)}
+            <View
               style={{
-                aspectRatio: 0.5622,
-                resizeMode: "contain",
+                overflow: "hidden",
+                height: 250,
               }}
-            />
-          </View>
+            >
+              <Image
+                src={getCoverUri(item)}
+                style={{
+                  aspectRatio: 0.5622,
+                  resizeMode: "contain",
+                }}
+              />
+            </View>
 
-          <View style={{ flex: 1, justifyContent: "center", padding: 8 }}>
-            <ThemedText>{item.title}</ThemedText>
-          </View>
-        </TouchableOpacity>
-      )}
-    />
+            <View style={{ flex: 1, justifyContent: "center", padding: 8 }}>
+              <ThemedText>{item.title}</ThemedText>
+            </View>
+          </TouchableOpacity>
+        )}
+      />
+    </SafeAreaView>
   );
 }
