@@ -8,7 +8,7 @@ export default function Layout() {
   const colors = useColors();
 
   return (
-    <Tabs screenOptions={{ animation: "shift", headerShown: false }}>
+    <Tabs screenOptions={{ headerShown: false }}>
       <Tabs.Screen
         name="index"
         options={{
