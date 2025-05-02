@@ -5,24 +5,24 @@ import { useColors } from "@/constants/Colors";
 import { Tabs } from "expo-router";
 
 export default function Layout() {
-  const colors = useColors();
-
   return (
     <Tabs screenOptions={{ headerShown: false }}>
       <Tabs.Screen
         name="index"
         options={{
           title: "Home",
-          tabBarLabelStyle: { color: colors.text },
-          tabBarIcon: () => <IconSymbol name="house" size={24} />,
+          tabBarIcon: ({ color }) => (
+            <IconSymbol name="house" size={24} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
         name="library"
         options={{
           title: "Library",
-          tabBarLabelStyle: { color: colors.text },
-          tabBarIcon: () => <IconSymbol name="book" size={24} />,
+          tabBarIcon: ({ color }) => (
+            <IconSymbol name="book" size={24} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
@@ -35,8 +35,9 @@ export default function Layout() {
         name="profile"
         options={{
           title: "Debug",
-          tabBarLabelStyle: { color: colors.text },
-          tabBarIcon: () => <IconSymbol name="burn" size={24} />,
+          tabBarIcon: ({ color }) => (
+            <IconSymbol name="burn" size={24} color={color} />
+          ),
         }}
       />
     </Tabs>
