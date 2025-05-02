@@ -56,7 +56,19 @@ export const MiniPlayer = () => {
           </View>
         </View>
       </Pressable>
-      <View>
+      <View style={{ flexDirection: "row", gap: 4 }}>
+        <Pressable
+          onPress={() => {
+            player.seekBy(-30);
+          }}
+          style={{
+            position: "relative",
+            top: -1,
+          }}
+        >
+          <IconSymbol name="gobackward.30" size={32} weight={"light"} />
+        </Pressable>
+
         {player.state === "playing" ? (
           <Pressable onPress={() => player.pause()}>
             <IconSymbol name="pause.circle" size={32} weight={"light"} />
