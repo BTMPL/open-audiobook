@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { usePlayer } from "../player/PlayerProvider";
 import { useStore } from "../datbase/DatabaseProvider";
 
 export type AppState = {

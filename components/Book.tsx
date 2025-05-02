@@ -174,7 +174,7 @@ const Download = ({ book }: { book: Track }) => {
           <ThemedText
             type="small"
             style={{
-              color: colors.text,
+              color: colorsInverted.text,
             }}
           >
             {progress}%
