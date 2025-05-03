@@ -5,14 +5,14 @@ export const track2: Track = {
   source: {
     remote: {
       current: true,
-      url: "http://127.0.0.1:8080/fal-of-hyperion-1.mp3",
+      url: "http://192.168.1.82:8080/fal-of-hyperion-1.mp3",
     },
   },
   title: "Fall of Hyperion (1 / 2)",
   addedAt: Date.now(),
   lastPlayedAt: Date.now(),
   status: "not_started",
-  cover: "http://127.0.0.1:8080/fall-of-hyperion.jpg",
+  cover: "http://192.168.1.82:8080/fall-of-hyperion.jpg",
   authors: ["Dan Simmons"],
   synopsis: "",
   duration: 9 * 3600 + 35 * 60 + 41,
@@ -166,11 +166,11 @@ export const track1: Track = {
   source: {
     remote: {
       current: true,
-      url: "http://127.0.0.1:8080/book.mp3",
+      url: "http://192.168.1.82:8080/book.mp3",
     },
   },
   title: "Hyperion",
-  cover: "http://127.0.0.1:8080/hyperion.jpg",
+  cover: "http://192.168.1.82:8080/hyperion.jpg",
   addedAt: Date.now(),
   lastPlayedAt: Date.now(),
   status: "not_started",
