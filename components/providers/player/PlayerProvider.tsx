@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 
 import TrackPlayer, {
-  AddTrack,
   Capability,
   Event,
   Progress,
@@ -13,6 +12,7 @@ import { useStore } from "../datbase/DatabaseProvider";
 import { track1, track2 } from "./mock";
 import { AppState } from "../app/AppProvider";
 import { getCoverUri } from "@/utils/getCoverUri";
+import { getTrackUrl } from "@/utils/getTrackUrl";
 
 export type Chapter = {
   from: number;
@@ -75,10 +75,7 @@ export function findChapter(chapters: Chapter[], currentTime: number): Chapter {
 export const PlayerContext = React.createContext<{
   progress: Progress;
   track: Track | undefined;
-  add: (
-    tracks: BookTrack,
-    options?: { playOnLoad?: boolean }
-  ) => Promise<number | void>;
+  set: (track: Track, options?: { playOnLoad?: boolean }) => void;
   seekBy: (position: number) => Promise<void>;
   seekTo: (position: number) => Promise<void>;
   stop: () => Promise<void>;
@@ -92,7 +89,7 @@ export const PlayerContext = React.createContext<{
     duration: 0,
     buffered: 0,
   },
-  add: () => Promise.resolve(),
+  set: () => Promise.resolve(),
   seekBy: () => Promise.resolve(),
   seekTo: () => Promise.resolve(),
   stop: () => Promise.resolve(),
@@ -115,9 +112,6 @@ export const PlaybackService = async function () {
 export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
   const appState = useStore<AppState>("appState");
 
-  const [bookId, setBookId] = React.useState<string | undefined>(
-    appState.byId("appState")?.track
-  );
   const [track, setTrack] = React.useState<Track | undefined>();
 
   const progress = useProgress();
@@ -125,9 +119,15 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
   const state = usePlaybackState();
 
   useEffect(() => {
-    const unsub = appState.byId$("appState", (state) => {
-      setBookId(state.track);
-    });
+    const unsub = appState.byId$(
+      "appState",
+      ({ track }) => {
+        if (track) {
+          setTrack(books.byId(track));
+        }
+      },
+      true
+    );
 
     TrackPlayer.setupPlayer();
     TrackPlayer.registerPlaybackService(() => PlaybackService);
@@ -147,34 +147,35 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
     };
   }, []);
 
-  useEffect(() => {
-    if (!bookId) return;
-    setTrack(books.byId(bookId));
-    return books.byId$(bookId, (book) => {
-      setTrack(book);
-    });
-  }, [bookId]);
-
+  /**
+   * Synchronize player to the app state, which holds information about the current track.
+   * We are only using trackId as a dependency in the hook, because the track object is constantly
+   * updated with the progress, and we don't want to trigger the effect every time.
+   */
   const { id: trackId, progress: trackProgress } = track || {};
-
   useEffect(() => {
-    // FIXME: this should be only called when we actually change the track / source
     if (!track) return;
-    const loadTrack = Object.values(track.source).find((s) => s.current);
-    if (!loadTrack) return;
-    TrackPlayer.add([
-      {
-        title: track.title,
-        artist: track.authors.join(", "),
-        cover: getCoverUri(track),
-        ...loadTrack,
-      },
-    ]).catch((e) => {
-      console.log("Error adding track", e);
-    });
+    const url = getTrackUrl(track);
+    if (!url) return;
+
+    TrackPlayer.load({
+      title: track.title,
+      artist: track.authors.join(", "),
+      cover: getCoverUri(track),
+      url,
+    })
+      .then(() => {
+        TrackPlayer.seekTo(track.progress);
+      })
+      .catch((e) => {
+        console.log("Error adding track", e);
+      });
   }, [trackId]);
 
-  // track progress, this can be debounced
+  /**
+   * Synchronize progress with the player state, this can probably be optimised
+   * so that we don't update the DB every single second; maybe debounce it a bit?
+   */
   useEffect(() => {
     if (!trackId) return;
     if (
@@ -197,26 +198,14 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
     <PlayerContext.Provider
       value={{
         progress,
-        add: (track: BookTrack, options = {}) => {
-          TrackPlayer.stop();
-          if (options.playOnLoad) {
-            const playbackWhenReady = (data: any) => {
-              console.log(data);
-            };
-            TrackPlayer.addEventListener(
-              Event.PlaybackActiveTrackChanged,
-              playbackWhenReady
-            );
-          }
-          console.log({ tracks });
-          const queue = TrackPlayer.load(track).then((queue) => {
-            if (options.playOnLoad) {
-              TrackPlayer.play();
-            }
-            return queue;
+        set: ({ id }: Track, options = {}) => {
+          if (options.playOnLoad) TrackPlayer.stop();
+          appState.update("appState", {
+            track: id,
           });
-
-          return queue;
+          if (options.playOnLoad) {
+            TrackPlayer.play();
+          }
         },
         seekBy: TrackPlayer.seekBy,
         seekTo: TrackPlayer.seekTo,

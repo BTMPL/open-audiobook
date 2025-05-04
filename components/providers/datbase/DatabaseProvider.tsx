@@ -77,7 +77,15 @@ const Model = <T extends StoreableObject>(table: StoreName, store: Store) => {
     return undefined;
   };
 
-  const byId$ = (id: string, callback: (data: T) => void): (() => void) => {
+  const byId$ = (
+    id: string,
+    callback: (data: T) => void,
+    hot: boolean = false
+  ): (() => void) => {
+    if (hot) {
+      const data = unserialize(store.getRow(table, id));
+      if (data?.id) callback(data as T);
+    }
     const Id = store.addRowListener(table, id, (store, tableId) => {
       const data = unserialize(store.getRow(table, id));
       if (data?.id) return callback(data as T);

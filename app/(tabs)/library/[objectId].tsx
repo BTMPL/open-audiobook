@@ -64,21 +64,8 @@ export default function Details() {
         </ScrollView>
         <Button
           onPress={() => {
-            app.update("appState", {
-              track: book.id,
-            });
-
             const track = Object.values(book.source).find((s) => s.current);
-            if (track)
-              player.add(
-                {
-                  title: book.title,
-                  artist: book.authors.join(", "),
-                  cover: getCoverUri(book),
-                  url: track.url,
-                },
-                { playOnLoad: true }
-              );
+            if (track) player.set(book, { playOnLoad: true });
           }}
           label="Play"
         >
