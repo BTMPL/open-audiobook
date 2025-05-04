@@ -1,4 +1,7 @@
-import { Track } from "@/components/providers/player/PlayerProvider";
+import {
+  LocalSource,
+  Track,
+} from "@/components/providers/player/PlayerProvider";
 
 const PLACEHOLDER_COVER = "";
 export const getCoverUri = (item: Track | undefined): string => {
@@ -7,16 +10,14 @@ export const getCoverUri = (item: Track | undefined): string => {
   }
 
   const source = Object.values(item.source).find((source) => source.current);
-  if (source && isRemoteSource(source) && source.cover) {
+  if (source && isLocalSource(source) && source.cover) {
     return source.cover;
   }
 
   return item.cover || PLACEHOLDER_COVER;
 };
 
-const isRemoteSource = (
-  source: any
-): source is { current: boolean; cover: string } => {
+const isLocalSource = (source: any): source is LocalSource => {
   return (
     typeof source.current === "boolean" && typeof source.cover === "string"
   );

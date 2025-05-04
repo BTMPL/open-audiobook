@@ -74,7 +74,7 @@ export default function Details() {
                 {
                   title: book.title,
                   artist: book.authors.join(", "),
-                  cover: book.cover,
+                  cover: getCoverUri(book),
                   url: track.url,
                 },
                 { playOnLoad: true }
