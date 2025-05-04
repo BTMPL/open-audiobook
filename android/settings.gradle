@@ -21,7 +21,7 @@ extensions.configure(com.facebook.react.ReactSettingsExtension) { ex ->
   }
 }
 
-rootProject.name = 'audio-book'
+rootProject.name = 'Open Audiobookk'
 
 dependencyResolutionManagement {
   versionCatalogs {

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "audio-book",
-    "slug": "audio-book",
+    "name": "Open Audiobook",
+    "slug": "open-audiobook",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -10,14 +10,14 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.audio-book"
+      "bundleIdentifier": "com.btm.audiobook"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.anonymous.audiobook"
+      "package": "com.btm.audiobook"
     },
     "web": {
       "bundler": "metro",
