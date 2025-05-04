@@ -69,7 +69,16 @@ export default function Details() {
             });
 
             const track = Object.values(book.source).find((s) => s.current);
-            if (track) player.add(track, { playOnLoad: true });
+            if (track)
+              player.add(
+                {
+                  title: book.title,
+                  artist: book.authors.join(", "),
+                  cover: book.cover,
+                  url: track.url,
+                },
+                { playOnLoad: true }
+              );
           }}
           label="Play"
         >

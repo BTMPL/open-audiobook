@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 
 import TrackPlayer, {
   AddTrack,
+  Capability,
   Event,
   Progress,
   State,
@@ -50,6 +51,13 @@ export type Source = {
   current: boolean;
 } & (RemoteSource | LocalSource);
 
+type BookTrack = {
+  url: string;
+  title: string;
+  artist: string;
+  cover: string;
+};
+
 export const tracks = [track1, track2];
 
 export function findChapter(chapters: Chapter[], currentTime: number): Chapter {
@@ -67,7 +75,7 @@ export const PlayerContext = React.createContext<{
   progress: Progress;
   track: Track | undefined;
   add: (
-    tracks: AddTrack,
+    tracks: BookTrack,
     options?: { playOnLoad?: boolean }
   ) => Promise<number | void>;
   seekBy: (position: number) => Promise<void>;
@@ -92,6 +100,17 @@ export const PlayerContext = React.createContext<{
   state: State.None,
 });
 
+export const PlaybackService = async function () {
+  TrackPlayer.addEventListener(Event.RemotePlay, () => TrackPlayer.play());
+  TrackPlayer.addEventListener(Event.RemotePause, () => TrackPlayer.pause());
+  TrackPlayer.addEventListener(Event.RemoteJumpForward, () =>
+    TrackPlayer.seekBy(15)
+  );
+  TrackPlayer.addEventListener(Event.RemoteJumpBackward, () =>
+    TrackPlayer.seekBy(-15)
+  );
+};
+
 export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
   const appState = useStore<AppState>("appState");
 
@@ -110,6 +129,17 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
     });
 
     TrackPlayer.setupPlayer();
+    TrackPlayer.registerPlaybackService(() => PlaybackService);
+
+    TrackPlayer.updateOptions({
+      // Media controls capabilities
+      capabilities: [
+        Capability.Play,
+        Capability.Pause,
+        Capability.JumpBackward,
+        Capability.JumpBackward,
+      ],
+    });
     return () => {
       TrackPlayer.stop();
       unsub();
@@ -159,7 +189,7 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
     <PlayerContext.Provider
       value={{
         progress,
-        add: (track: AddTrack, options = {}) => {
+        add: (track: BookTrack, options = {}) => {
           TrackPlayer.stop();
           if (options.playOnLoad) {
             const playbackWhenReady = (data: any) => {
