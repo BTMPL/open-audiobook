@@ -1,0 +1,6 @@
+- MiniPlayer: play button too small
+- add option to delete downloaded resource
+- change download progress indicator to circle on the icon
+- add flyout showing target time on slider
+  - find some place to show the actual time, not only in-chapter time
+- fix how PlayerProvider is used to play tracks, player.add() shouldn't call TrackPlayer directly but update the state and let the effects do their job

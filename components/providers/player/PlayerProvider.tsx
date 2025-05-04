@@ -12,6 +12,7 @@ import TrackPlayer, {
 import { useStore } from "../datbase/DatabaseProvider";
 import { track1, track2 } from "./mock";
 import { AppState } from "../app/AppProvider";
+import { getCoverUri } from "@/utils/getCoverUri";
 
 export type Chapter = {
   from: number;
@@ -137,7 +138,7 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
         Capability.Play,
         Capability.Pause,
         Capability.JumpBackward,
-        Capability.JumpBackward,
+        Capability.JumpForward,
       ],
     });
     return () => {
@@ -161,7 +162,14 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
     if (!track) return;
     const loadTrack = Object.values(track.source).find((s) => s.current);
     if (!loadTrack) return;
-    TrackPlayer.add([loadTrack]).catch((e) => {
+    TrackPlayer.add([
+      {
+        title: track.title,
+        artist: track.authors.join(", "),
+        cover: getCoverUri(track),
+        ...loadTrack,
+      },
+    ]).catch((e) => {
       console.log("Error adding track", e);
     });
   }, [trackId]);
