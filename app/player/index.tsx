@@ -5,6 +5,8 @@ import {
   Pressable,
   ScrollView,
   Appearance,
+  Text,
+  DimensionValue,
 } from "react-native";
 
 import ParallaxScrollView from "@/components/ParallaxScrollView";
@@ -23,10 +25,14 @@ import { getCoverUri } from "@/utils/getCoverUri";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 import { useColors } from "@/constants/Colors";
 import { Dropdown } from "@/components/Dropdown";
+import { useState } from "react";
 
 export default function HomeScreen() {
   const player = usePlayer();
   const router = useRouter();
+  const color = useColors();
+
+  const [tooltipPosition, setTooltipPosition] = useState<number | null>(null);
 
   const chapter = player.track
     ? findChapter(player.track.chapters, player.progress.position)
@@ -36,11 +42,16 @@ export default function HomeScreen() {
     : 0;
 
   const played = toHms(positionInChapter);
-  const left = chapter ? toHms(chapter.to - positionInChapter) : 0;
+  const left = chapter
+    ? toHms(chapter.to - chapter.from - positionInChapter)
+    : 0;
 
   const percentage = chapter
     ? (positionInChapter / (chapter.to - chapter.from)) * 100
     : 0;
+
+  const tooltipOffset =
+    tooltipPosition === null ? 0 : Math.max(Math.min(95, tooltipPosition), 5);
 
   return (
     <>
@@ -126,6 +137,62 @@ export default function HomeScreen() {
             <IconSymbol name="goforward.30" size={48} weight={"light"} />
           </Pressable>
         </View>
+        <View
+          style={{
+            position: "relative",
+            backgroundColor: "#ffffff",
+            height: 0,
+            marginLeft: 16,
+            marginRight: 16,
+          }}
+        >
+          {tooltipPosition !== null && player.track && chapter && (
+            <View
+              style={{
+                position: "absolute",
+                top: -20,
+                left: (tooltipOffset + "%") as DimensionValue,
+                padding: 4,
+                borderRadius: 8,
+                backgroundColor: color.icon,
+                transform: [{ translateX: "-50%" }],
+              }}
+            >
+              <Text>
+                {`${toHms(
+                  Math.max(
+                    chapter.from - chapter.to,
+                    Math.round(
+                      ((chapter.to - chapter.from) * tooltipPosition) / 100
+                    )
+                  ),
+                  true
+                )} / ${toHms(
+                  Math.min(
+                    player.track.duration,
+                    Math.round(
+                      chapter.from +
+                        ((chapter.to - chapter.from) * tooltipPosition) / 100
+                    )
+                  ),
+                  true
+                )}`}
+              </Text>
+              <View
+                style={{
+                  borderWidth: 8,
+                  borderColor: "transparent",
+                  borderTopColor: color.icon,
+                  position: "absolute",
+                  bottom: -16,
+                  left: "50%",
+                  transform: [{ translateX: -4 }, { rotate: "0deg" }],
+                }}
+              />
+            </View>
+          )}
+        </View>
+
         <Slider
           style={{}}
           value={percentage}
@@ -134,13 +201,18 @@ export default function HomeScreen() {
           minimumTrackTintColor={slider.past}
           maximumTrackTintColor={slider.track}
           tapToSeek={true}
+          onValueChange={(v) => {
+            setTooltipPosition(v);
+          }}
           onSlidingComplete={(value) => {
+            setTooltipPosition(null);
             chapter &&
               player.seekTo(
                 chapter.from + (value / 100) * (chapter.to - chapter.from)
               );
           }}
         />
+
         <View style={style.timer}>
           <ThemedText>{played}</ThemedText>
           <ThemedText>{left}</ThemedText>
