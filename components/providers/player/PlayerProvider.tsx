@@ -161,7 +161,7 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
     TrackPlayer.load({
       title: track.title,
       artist: track.authors.join(", "),
-      cover: getCoverUri(track),
+      artwork: getCoverUri(track),
       url,
     })
       .then(() => {
