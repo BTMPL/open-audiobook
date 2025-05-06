@@ -1,5 +1,10 @@
 import { Alert, Image, Pressable, View } from "react-native";
-import { Source, SourceType, Track } from "./providers/player/PlayerProvider";
+import {
+  Source,
+  SourceType,
+  Track,
+  usePlayer,
+} from "./providers/player/PlayerProvider";
 import { toHms } from "@/utils/time";
 import { ThemedText } from "./ThemedText";
 import { getCoverUri } from "@/utils/getCoverUri";
@@ -11,6 +16,7 @@ import { useColors } from "@/constants/Colors";
 import { Progress } from "./ui/Progress";
 
 export const Book = ({ item }: { item: Track }) => {
+  const player = usePlayer();
   return (
     <View style={{ flexDirection: "row", gap: 8, alignItems: "center" }}>
       <View style={{ position: "relative" }}>
@@ -32,8 +38,28 @@ export const Book = ({ item }: { item: Track }) => {
         </View>
         <View>
           <ThemedText>
-            <Pressable onPress={() => {}}>
-              <IconSymbol name="play.circle" size={28} weight="light" />
+            <Pressable
+              onPress={() => {
+                const track = Object.values(item.source).find((s) => s.current);
+                if (
+                  track &&
+                  !(item.id === player.track?.id && player.state === "playing")
+                ) {
+                  player.set(item, { playOnLoad: true });
+                } else {
+                  player.pause();
+                }
+              }}
+            >
+              <IconSymbol
+                name={
+                  player.track?.id === item.id && player.state === "playing"
+                    ? "pause.circle"
+                    : "play.circle"
+                }
+                size={28}
+                weight="light"
+              />
             </Pressable>
             <Pressable onPress={() => {}}>
               <IconSymbol name="slider.horizontal.3" size={28} weight="light" />
