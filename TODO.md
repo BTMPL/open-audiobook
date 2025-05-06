@@ -1,2 +1,1 @@
 - add option to delete downloaded resource
-- change download progress indicator to circle on the icon

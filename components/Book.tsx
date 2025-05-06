@@ -8,6 +8,7 @@ import { useDownload } from "./providers/download/DownloadProvider";
 import { useStore } from "./providers/datbase/DatabaseProvider";
 import { useState } from "react";
 import { useColors } from "@/constants/Colors";
+import { Progress } from "./ui/Progress";
 
 export const Book = ({ item }: { item: Track }) => {
   return (
@@ -51,6 +52,22 @@ const Download = ({ book }: { book: Track }) => {
   const store = useStore<Track>("books");
   const colors = useColors();
   const colorsInverted = useColors({ invert: true });
+
+  if (progress > -1) {
+    return (
+      <View
+        style={{
+          position: "absolute",
+          top: 5,
+          left: 5,
+          right: 5,
+          bottom: 5,
+        }}
+      >
+        <Progress value={progress} size={50} color={colors.text} />
+      </View>
+    );
+  }
 
   return (
     <Pressable
@@ -163,35 +180,16 @@ const Download = ({ book }: { book: Track }) => {
         }}
       ></View>
 
-      {progress > -1 ? (
-        <View
-          style={{
-            position: "absolute",
-            bottom: 2,
-            right: 2,
-          }}
-        >
-          <ThemedText
-            type="small"
-            style={{
-              color: colorsInverted.text,
-            }}
-          >
-            {progress}%
-          </ThemedText>
-        </View>
-      ) : (
-        <IconSymbol
-          name="arrow.down"
-          color={colorsInverted.icon}
-          size={16}
-          style={{
-            position: "absolute",
-            bottom: 4,
-            right: 4,
-          }}
-        />
-      )}
+      <IconSymbol
+        name="arrow.down"
+        color={colorsInverted.icon}
+        size={16}
+        style={{
+          position: "absolute",
+          bottom: 4,
+          right: 4,
+        }}
+      />
     </Pressable>
   );
 };
