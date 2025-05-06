@@ -158,6 +158,7 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
     const url = getTrackUrl(track);
     if (!url) return;
 
+    console.log("Loading track", trackId, url);
     TrackPlayer.load({
       title: track.title,
       artist: track.authors.join(", "),
@@ -165,6 +166,7 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
       url,
     })
       .then(() => {
+        console.log("seek to", track.progress);
         TrackPlayer.seekTo(track.progress);
       })
       .catch((e) => {
@@ -199,7 +201,7 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
       value={{
         progress,
         set: ({ id }: Track, options = {}) => {
-          if (options.playOnLoad) TrackPlayer.stop();
+          if (options.playOnLoad) TrackPlayer.pause();
           appState.update("appState", {
             track: id,
           });

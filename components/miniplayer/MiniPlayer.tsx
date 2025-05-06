@@ -2,8 +2,6 @@ import { View, Image, StyleSheet, Pressable } from "react-native";
 import { findChapter, usePlayer } from "../providers/player/PlayerProvider";
 import { toHms } from "@/utils/time";
 import { useRouter } from "expo-router";
-import { useEffect } from "react";
-import { State } from "react-native-track-player";
 import { ThemedText } from "../ThemedText";
 import { getCoverUri } from "@/utils/getCoverUri";
 import { IconSymbol } from "../ui/IconSymbol";
@@ -22,18 +20,6 @@ export const MiniPlayer = () => {
   const chapter = player.track
     ? findChapter(player.track.chapters, position)
     : undefined;
-
-  useEffect(() => {
-    if (!player.track) return;
-
-    const storedPosition = player.track.progress;
-
-    if (storedPosition && player.state !== State.Playing) {
-      player.seekTo(storedPosition);
-    }
-
-    return () => {};
-  }, [player.track]);
 
   if (!player.track) return null;
 
