@@ -65,7 +65,12 @@ export default function Details() {
         <Button
           onPress={() => {
             const track = Object.values(book.source).find((s) => s.current);
-            if (track) player.set(book, { playOnLoad: true });
+            if (
+              track &&
+              !(book.id === player.track?.id && player.state === "playing")
+            ) {
+              player.set(book, { playOnLoad: true });
+            }
           }}
           label="Play"
         >

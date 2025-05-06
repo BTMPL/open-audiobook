@@ -57,7 +57,7 @@ export const MiniPlayer = () => {
 
         {player.state === "playing" ? (
           <Pressable onPress={() => player.pause()}>
-            <IconSymbol name="pause.circle" size={32} weight={"light"} />
+            <IconSymbol name="pause.circle" size={48} weight={"light"} />
           </Pressable>
         ) : (
           <Pressable onPress={() => player.play()}>
