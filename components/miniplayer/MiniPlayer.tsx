@@ -56,7 +56,7 @@ export const MiniPlayer = () => {
           </View>
         </View>
       </Pressable>
-      <View style={{ flexDirection: "row", gap: 4 }}>
+      <View style={{ flexDirection: "row", gap: 4, alignItems: "center" }}>
         <Pressable
           onPress={() => {
             player.seekBy(-30);
@@ -75,7 +75,7 @@ export const MiniPlayer = () => {
           </Pressable>
         ) : (
           <Pressable onPress={() => player.play()}>
-            <IconSymbol name="play.circle" size={32} weight={"light"} />
+            <IconSymbol name="play.circle" size={48} weight={"light"} />
           </Pressable>
         )}
       </View>

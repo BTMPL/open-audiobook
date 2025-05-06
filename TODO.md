@@ -1,4 +1,3 @@
-- MiniPlayer: play button too small
 - add option to delete downloaded resource
 - change download progress indicator to circle on the icon
 - add flyout showing target time on slider
