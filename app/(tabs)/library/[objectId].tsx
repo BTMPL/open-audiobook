@@ -1,11 +1,4 @@
-import {
-  Image,
-  StyleSheet,
-  View,
-  Pressable,
-  ScrollView,
-  Appearance,
-} from "react-native";
+import { Image, StyleSheet, View, Pressable, ScrollView } from "react-native";
 
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 
@@ -17,7 +10,6 @@ import { useStore } from "@/components/providers/datbase/DatabaseProvider";
 import { ThemedText } from "@/components/ThemedText";
 import { getCoverUri } from "@/utils/getCoverUri";
 import { IconSymbol } from "@/components/ui/IconSymbol";
-import { AppState } from "@/components/providers/app/AppProvider";
 import { Button } from "@/components/ui/Button";
 
 export default function Details() {
@@ -26,7 +18,6 @@ export default function Details() {
   const store = useStore<Track>("books");
   const params = useLocalSearchParams();
 
-  const app = useStore<AppState>("appState");
   const player = usePlayer();
 
   const book = store.byId(params.objectId as string);
@@ -80,8 +71,6 @@ export default function Details() {
     </>
   );
 }
-
-const colorScheme = Appearance.getColorScheme();
 
 const style = StyleSheet.create({
   cover: {

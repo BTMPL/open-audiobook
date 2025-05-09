@@ -8,14 +8,7 @@ import { IconSymbol } from "@/components/ui/IconSymbol";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 
-import {
-  FlatList,
-  Pressable,
-  SafeAreaView,
-  TouchableOpacity,
-  View,
-  Text,
-} from "react-native";
+import { FlatList, SafeAreaView, TouchableOpacity, View } from "react-native";
 
 export default function Library() {
   const [tab, setTab] = useState("all");

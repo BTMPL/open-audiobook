@@ -1,7 +1,4 @@
-import { StyleSheet } from "react-native";
 import { IconSymbol } from "@/components/ui/IconSymbol";
-import { useColorScheme } from "@/hooks/useColorScheme";
-import { useColors } from "@/constants/Colors";
 import { Tabs } from "expo-router";
 
 export default function Layout() {
@@ -20,15 +17,10 @@ export default function Layout() {
         name="library"
         options={{
           title: "Library",
+          popToTopOnBlur: true,
           tabBarIcon: ({ color }) => (
             <IconSymbol name="book" size={24} color={color} />
           ),
-        }}
-      />
-      <Tabs.Screen
-        name="(library)/library"
-        options={{
-          href: null,
         }}
       />
       <Tabs.Screen
@@ -43,18 +35,3 @@ export default function Layout() {
     </Tabs>
   );
 }
-
-const styles = StyleSheet.create({
-  tabs: {
-    bottom: 0,
-    padding: 10,
-    paddingBottom: 32,
-    borderTopWidth: 1,
-  },
-  tabTrigger: {
-    flex: 1,
-    height: 32,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
