@@ -4,7 +4,7 @@ import ParallaxScrollView from "@/components/ParallaxScrollView";
 
 import { Track, usePlayer } from "@/components/providers/player/PlayerProvider";
 
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 
 import { useStore } from "@/components/providers/datbase/DatabaseProvider";
 import { ThemedText } from "@/components/ThemedText";
@@ -17,13 +17,15 @@ export default function Details() {
 
   const store = useStore<Track>("books");
   const params = useLocalSearchParams();
+  const location = useNavigation();
 
   const player = usePlayer();
 
   const book = store.byId(params.objectId as string);
 
   if (!book) {
-    return router.push("/");
+    router.push("/");
+    return null;
   }
 
   return (
@@ -40,7 +42,14 @@ export default function Details() {
                 }
               }}
             >
-              <IconSymbol name="chevron.down.circle.fill" size={32} />
+              <IconSymbol
+                name={
+                  location.getParent()?.getId()
+                    ? "chevron.down.circle.fill"
+                    : "chevron.left.circle.fill"
+                }
+                size={32}
+              />
             </Pressable>
           </View>
         }
