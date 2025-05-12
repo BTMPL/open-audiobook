@@ -9,6 +9,7 @@ type Props = {
   onChange: (id: string) => void;
   prefix?: JSX.Element;
   placeholderStyle?: Object;
+  render?: () => JSX.Element;
 };
 export const Dropdown = ({
   items,
@@ -16,6 +17,7 @@ export const Dropdown = ({
   onChange,
   prefix,
   placeholderStyle,
+  render,
 }: Props) => {
   const [open, setOpen] = useState(false);
   const colors = useColors();
@@ -30,10 +32,16 @@ export const Dropdown = ({
             gap: 4,
           }}
         >
-          {prefix || items.find((items) => items.id === active)?.icon}
-          <ThemedText>
-            {items.find((items) => items.id === active)?.label}
-          </ThemedText>
+          {render ? (
+            render()
+          ) : (
+            <>
+              {prefix || items.find((items) => items.id === active)?.icon}
+              <ThemedText>
+                {items.find((items) => items.id === active)?.label}
+              </ThemedText>
+            </>
+          )}
         </Pressable>
       </View>
       <Modal visible={open} animationType="slide" transparent={true}>

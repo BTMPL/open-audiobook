@@ -27,6 +27,15 @@ import { useColors } from "@/constants/Colors";
 import { Dropdown } from "@/components/Dropdown";
 import { useState } from "react";
 
+const speeds = [
+  { id: "0.7", label: "x0.7" },
+  { id: "1", label: "x1" },
+  { id: "1.2", label: "x1.2" },
+  { id: "1.5", label: "x1.5" },
+  { id: "1.7", label: "x1.7" },
+  { id: "2", label: "x2" },
+];
+
 export default function HomeScreen() {
   const player = usePlayer();
   const router = useRouter();
@@ -108,6 +117,13 @@ export default function HomeScreen() {
               player.seekBy(-30);
             }}
           >
+            <IconSymbol name="backward.end" size={36} weight={"light"} />
+          </Pressable>
+          <Pressable
+            onPress={() => {
+              player.seekBy(-30);
+            }}
+          >
             <IconSymbol name="gobackward.30" size={48} weight={"light"} />
           </Pressable>
 
@@ -136,6 +152,40 @@ export default function HomeScreen() {
           >
             <IconSymbol name="goforward.30" size={48} weight={"light"} />
           </Pressable>
+
+          <Dropdown
+            active={player.playbackRate.toString()}
+            items={speeds}
+            onChange={(speed) => player.setPlaybackSpeed(parseFloat(speed))}
+            render={() => {
+              return (
+                <View
+                  style={{
+                    borderColor: color.icon,
+                    borderWidth: 2.5,
+                    borderRadius: "50%",
+                    width: 38,
+                    height: 38,
+                    position: "relative",
+                    top: 2,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <ThemedText
+                    style={{
+                      fontSize:
+                        player.playbackRate.toString().length === 1 ? 20 : 14,
+                      color: color.icon,
+                      fontWeight: 500,
+                    }}
+                  >
+                    x{player.playbackRate.toString()}
+                  </ThemedText>
+                </View>
+              );
+            }}
+          />
         </View>
         <View
           style={{

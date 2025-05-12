@@ -81,6 +81,8 @@ export const PlayerContext = React.createContext<{
   stop: () => Promise<void>;
   play: () => Promise<void>;
   pause: () => Promise<void>;
+  playbackRate: number;
+  setPlaybackSpeed: (speed: number) => Promise<void>;
   state?: State;
 }>({
   track: undefined,
@@ -95,6 +97,8 @@ export const PlayerContext = React.createContext<{
   stop: () => Promise.resolve(),
   play: () => Promise.resolve(),
   pause: () => Promise.resolve(),
+  playbackRate: 1,
+  setPlaybackSpeed: () => Promise.resolve(),
   state: State.None,
 });
 
@@ -113,6 +117,7 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
   const appState = useStore<AppState>("appState");
 
   const [track, setTrack] = React.useState<Track | undefined>();
+  const [playbackRate, setPlaybackRate] = React.useState(1);
 
   const progress = useProgress();
   const books = useStore<Track>("books");
@@ -121,9 +126,13 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const unsub = appState.byId$(
       "appState",
-      ({ track }) => {
+      ({ track, playbackRate }) => {
         if (track) {
           setTrack(books.byId(track));
+        }
+        if (playbackRate) {
+          TrackPlayer.setRate(playbackRate);
+          setPlaybackRate(playbackRate);
         }
       },
       true
@@ -196,6 +205,11 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [trackProgress, trackId, state.state, progress.position]);
 
+  const play = () => {
+    TrackPlayer.setRate(appState?.byId("appState")?.playbackRate || 1);
+    return TrackPlayer.play();
+  };
+
   return (
     <PlayerContext.Provider
       value={{
@@ -206,14 +220,21 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
             track: id,
           });
           if (options.playOnLoad) {
-            TrackPlayer.play();
+            play();
           }
         },
         seekBy: TrackPlayer.seekBy,
         seekTo: TrackPlayer.seekTo,
         stop: TrackPlayer.stop,
-        play: TrackPlayer.play,
+        play,
         pause: TrackPlayer.pause,
+        playbackRate,
+        setPlaybackSpeed: (speed: number) => {
+          appState.update("appState", {
+            playbackRate: speed,
+          });
+          return Promise.resolve();
+        },
         track,
         state: state.state,
       }}
