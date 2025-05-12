@@ -1,5 +1,101 @@
 import { Track } from "./PlayerProvider";
 
+export const track3: Track = {
+  id: "3",
+  source: {
+    remote: {
+      current: true,
+      url: "http://192.168.1.82:8080/fall-of-hyperion-2.mp3",
+    },
+  },
+  title: "Fall of Hyperion (2 / 2)",
+  addedAt: Date.now(),
+  lastPlayedAt: Date.now(),
+  status: "not_started",
+  cover: "http://192.168.1.82:8080/fall-of-hyperion.jpg",
+  authors: ["Dan Simmons"],
+  synopsis: "",
+  duration: 10 * 3600 + 3 * 60 + 41,
+  progress: 0,
+  chapters: [
+    {
+      from: 0 * 3600 + 0 * 60 + 0,
+      to: 0 * 3600 + 45 * 60 + 42,
+      title: "(xxxii)",
+    },
+    {
+      from: 0 * 3600 + 45 * 60 + 42,
+      to: 1 * 3600 + 15 * 60 + 37,
+      title: "(xxxiii)",
+    },
+    {
+      from: 1 * 3600 + 15 * 60 + 37,
+      to: 2 * 3600 + 5 * 60 + 0,
+      title: "(xxxiv)",
+    },
+    {
+      from: 2 * 3600 + 5 * 60 + 0,
+      to: 2 * 3600 + 33 * 60 + 3,
+      title: "(xxxv)",
+    },
+    {
+      from: 2 * 3600 + 33 * 60 + 3,
+      to: 3 * 3600 + 17 * 60 + 25,
+      title: "(xxxvi)",
+    },
+    {
+      from: 3 * 3600 + 17 * 60 + 25,
+      to: 4 * 3600 + 4 * 60 + 53,
+      title: "(xxxvii)",
+    },
+    {
+      from: 4 * 3600 + 4 * 60 + 53,
+      to: 4 * 3600 + 43 * 60 + 10,
+      title: "(xxxviii)",
+    },
+    {
+      from: 4 * 3600 + 43 * 60 + 10,
+      to: 5 * 3600 + 29 * 60 + 55,
+      title: "(xxxix)",
+    },
+    {
+      from: 5 * 3600 + 29 * 60 + 55,
+      to: 5 * 3600 + 54 * 60 + 21,
+      title: "(xl)",
+    },
+    {
+      from: 5 * 3600 + 54 * 60 + 21,
+      to: 6 * 3600 + 25 * 60 + 56,
+      title: "(xli)",
+    },
+    {
+      from: 6 * 3600 + 25 * 60 + 56,
+      to: 7 * 3600 + 19 * 60 + 37,
+      title: "(xlii)",
+    },
+    {
+      from: 7 * 3600 + 19 * 60 + 37,
+      to: 8 * 3600 + 21 * 60 + 22,
+      title: "(xliii)",
+    },
+    {
+      from: 8 * 3600 + 21 * 60 + 22,
+      to: 8 * 3600 + 53 * 60 + 41,
+      title: "(xliv)",
+    },
+    {
+      from: 8 * 3600 + 53 * 60 + 41,
+      to: 9 * 3600 + 35 * 60 + 35,
+      title: "(xlv)",
+    },
+    {
+      from: 9 * 3600 + 35 * 60 + 35,
+      to: 10 * 3600 + 3 * 60 + 41,
+      title: "(xlvi)",
+    },
+  ],
+};
+
 export const track2: Track = {
   id: "2",
   source: {

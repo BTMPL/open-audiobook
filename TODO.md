@@ -1,1 +1,2 @@
 - add option to delete downloaded resource
+- i18n + a11y
