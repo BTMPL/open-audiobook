@@ -114,7 +114,7 @@ export default function HomeScreen() {
         <View style={style.navigation}>
           <Pressable
             onPress={() => {
-              player.seekBy(-30);
+              player.seekTo(chapter?.from ? chapter.from + 1 : 0);
             }}
           >
             <IconSymbol name="backward.end" size={36} weight={"light"} />
