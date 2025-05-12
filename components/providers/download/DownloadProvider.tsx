@@ -1,6 +1,7 @@
 import * as FileSystem from "expo-file-system";
 import React from "react";
 import { MMKV } from "react-native-mmkv";
+import { remove } from "react-native-track-player/lib/src/trackPlayer";
 
 const store = new MMKV({
   id: "downloader",
@@ -18,12 +19,16 @@ const DownloadContext = React.createContext<{
     url: string,
     callback: (percentage: number, done: boolean, uri?: string) => void
   ) => Promise<string | undefined>;
+  remove: (path: string) => Promise<void>;
 }>({
   start: () => {
     throw new Error("start function not implemented");
   },
   resume: () => {
     throw new Error("resume function not implemented");
+  },
+  remove: () => {
+    throw new Error("remove function not implemented");
   },
 });
 
@@ -79,6 +84,16 @@ export const DownloadProvider = ({
             );
           },
         };
+      },
+
+      remove: async (path: string) => {
+        // Ensure the path contains only the file name
+        const fileName = path.split("/").pop();
+        const fileUri = FileSystem.documentDirectory + "files/" + fileName;
+        const fileInfo = await FileSystem.getInfoAsync(fileUri);
+        if (fileInfo.exists) {
+          await FileSystem.deleteAsync(fileUri);
+        }
       },
 
       resume: async (

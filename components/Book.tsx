@@ -1,5 +1,6 @@
-import { Alert, Image, Pressable, View } from "react-native";
+import { Alert, Image, Pressable, TouchableOpacity, View } from "react-native";
 import {
+  LocalSource,
   Source,
   SourceType,
   Track,
@@ -14,9 +15,13 @@ import { useStore } from "./providers/datbase/DatabaseProvider";
 import { useState } from "react";
 import { useColors } from "@/constants/Colors";
 import { Progress } from "./ui/Progress";
+import { Dropdown } from "./Dropdown";
+import { isLocalSource } from "@/utils/track";
 
 export const Book = ({ item }: { item: Track }) => {
   const player = usePlayer();
+  const download = useDownload();
+  const store = useStore<Track>("books");
   return (
     <View style={{ flexDirection: "row", gap: 8, alignItems: "center" }}>
       <View style={{ position: "relative" }}>
@@ -36,35 +41,73 @@ export const Book = ({ item }: { item: Track }) => {
           <ThemedText type="compact">{item.authors.join(", ")}</ThemedText>
           <ThemedText type="compact">{toHms(item.duration)}</ThemedText>
         </View>
-        <View>
-          <ThemedText>
-            <Pressable
-              onPress={() => {
-                const track = Object.values(item.source).find((s) => s.current);
-                if (
-                  track &&
-                  !(item.id === player.track?.id && player.state === "playing")
-                ) {
-                  player.set(item, { playOnLoad: true });
-                } else {
-                  player.pause();
-                }
-              }}
-            >
-              <IconSymbol
-                name={
-                  player.track?.id === item.id && player.state === "playing"
-                    ? "pause.circle"
-                    : "play.circle"
-                }
-                size={28}
-                weight="light"
-              />
-            </Pressable>
-            <Pressable onPress={() => {}}>
+        <View
+          style={{
+            flexDirection: "row",
+            gap: 8,
+            alignItems: "center",
+            justifyContent: "flex-end",
+          }}
+        >
+          <Pressable
+            onPress={() => {
+              const track = Object.values(item.source).find((s) => s.current);
+              if (
+                track &&
+                !(item.id === player.track?.id && player.state === "playing")
+              ) {
+                player.set(item, { playOnLoad: true });
+              } else {
+                player.pause();
+              }
+            }}
+          >
+            <IconSymbol
+              name={
+                player.track?.id === item.id && player.state === "playing"
+                  ? "pause.circle"
+                  : "play.circle"
+              }
+              size={28}
+              weight="light"
+            />
+          </Pressable>
+
+          <Dropdown
+            render={() => (
               <IconSymbol name="slider.horizontal.3" size={28} weight="light" />
-            </Pressable>
-          </ThemedText>
+            )}
+            items={[
+              {
+                id: "download",
+                label: !item.source.local ? "Download" : "Remove",
+              },
+            ]}
+            active={""}
+            onChange={(data) => {
+              if (data === "download") {
+                const source = isLocalSource(item.source.local)
+                  ? item.source.local
+                  : undefined;
+                if (source) {
+                  download.remove(source.url).then(() => {
+                    store.update(item.id, {
+                      source: Object.entries(item.source).reduce(
+                        (acc, [key, value]) => {
+                          if (key !== "remote") return acc;
+                          acc[key as SourceType] = value;
+                          return acc;
+                        },
+                        {} as Record<SourceType, Source>
+                      ),
+                    });
+                  });
+
+                  if (source.cover) download.remove(source.cover);
+                }
+              }
+            }}
+          />
         </View>
       </View>
     </View>

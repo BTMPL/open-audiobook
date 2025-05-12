@@ -2,6 +2,7 @@ import {
   LocalSource,
   Track,
 } from "@/components/providers/player/PlayerProvider";
+import { isLocalSource } from "./track";
 
 const PLACEHOLDER_COVER = "";
 export const getCoverUri = (item: Track | undefined): string => {
@@ -15,10 +16,4 @@ export const getCoverUri = (item: Track | undefined): string => {
   }
 
   return item.cover || PLACEHOLDER_COVER;
-};
-
-const isLocalSource = (source: any): source is LocalSource => {
-  return (
-    typeof source.current === "boolean" && typeof source.cover === "string"
-  );
 };
