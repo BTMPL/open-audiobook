@@ -1,6 +1,5 @@
-import { Alert, Image, Pressable, TouchableOpacity, View } from "react-native";
+import { Alert, Image, Pressable, View } from "react-native";
 import {
-  LocalSource,
   Source,
   SourceType,
   Track,
@@ -186,7 +185,6 @@ export const Book = ({ book }: { book: Track }) => {
 };
 
 const Download = ({
-  book,
   download,
   progress,
 }: {
@@ -194,7 +192,6 @@ const Download = ({
   download: () => void;
   progress: number;
 }) => {
-  const store = useStore<Track>("books");
   const colors = useColors();
   const colorsInverted = useColors({ invert: true });
 
