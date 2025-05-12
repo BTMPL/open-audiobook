@@ -1,7 +1,14 @@
-import { LocalSource } from "@/components/providers/player/PlayerProvider";
+import {
+  LocalSource,
+  Source,
+  SourceType,
+} from "@/components/providers/player/PlayerProvider";
 
-export const isLocalSource = (source: any): source is LocalSource => {
+export const isLocalSource = (source: object): source is LocalSource => {
   return (
-    typeof source.current === "boolean" && typeof source.cover === "string"
+    "current" in source &&
+    "cover" in source &&
+    typeof source.current === "boolean" &&
+    typeof source.cover === "string"
   );
 };

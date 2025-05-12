@@ -18,15 +18,83 @@ import { Progress } from "./ui/Progress";
 import { Dropdown } from "./Dropdown";
 import { isLocalSource } from "@/utils/track";
 
-export const Book = ({ item }: { item: Track }) => {
+export const Book = ({ book }: { book: Track }) => {
   const player = usePlayer();
   const download = useDownload();
   const store = useStore<Track>("books");
+  const [progress, setProgress] = useState(-1);
+
+  const startDownload = () => {
+    const url = book.source.remote?.url;
+    if (!url) return;
+    const prom: Promise<Record<string, string>>[] = [];
+    prom.push(
+      new Promise((resolve, reject) => {
+        if (!book?.id) reject("No track");
+        download.start(url, `${book!.id}.mp3`, (percentage, done, uri) => {
+          if (done) {
+            if (uri) resolve({ url: uri });
+            else reject("Resource download failed");
+          } else {
+            setProgress(percentage === 100 ? -1 : percentage);
+          }
+        });
+      })
+    );
+    prom.push(
+      new Promise((resolve, reject) => {
+        if (!book?.id) reject("No track");
+        download.start(
+          book!.cover,
+          `${book!.id}.${book!.cover.split(".").pop()}`,
+          (_percentage, done, uri) => {
+            if (done) {
+              if (uri) {
+                resolve({ cover: uri });
+              } else reject("Cover download failed");
+            }
+          }
+        );
+      })
+    );
+
+    Promise.all(prom)
+      .then((values) => {
+        if (!book?.source) return;
+        const partial = values.reduce((acc, value) => {
+          return { ...acc, ...value };
+        }, {});
+
+        store.update(book.id, {
+          source: Object.entries(book.source).reduce(
+            (acc, [key, value]) => {
+              if (key === "local") return acc;
+              acc[key as SourceType] = {
+                ...value,
+                current: false,
+              };
+              return acc;
+            },
+            {
+              local: {
+                ...partial,
+                current: true,
+              },
+            } as Record<SourceType, Source>
+          ),
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
   return (
     <View style={{ flexDirection: "row", gap: 8, alignItems: "center" }}>
       <View style={{ position: "relative" }}>
-        <Image src={getCoverUri(item)} style={{ width: 60, height: 60 }} />
-        {!item.source.local && <Download book={item} />}
+        <Image src={getCoverUri(book)} style={{ width: 60, height: 60 }} />
+        {!book.source.local && (
+          <Download book={book} progress={progress} download={startDownload} />
+        )}
       </View>
       <View
         style={{
@@ -37,9 +105,9 @@ export const Book = ({ item }: { item: Track }) => {
         }}
       >
         <View style={{ gap: 4 }}>
-          <ThemedText type="compact">{item.title}</ThemedText>
-          <ThemedText type="compact">{item.authors.join(", ")}</ThemedText>
-          <ThemedText type="compact">{toHms(item.duration)}</ThemedText>
+          <ThemedText type="compact">{book.title}</ThemedText>
+          <ThemedText type="compact">{book.authors.join(", ")}</ThemedText>
+          <ThemedText type="compact">{toHms(book.duration)}</ThemedText>
         </View>
         <View
           style={{
@@ -51,12 +119,12 @@ export const Book = ({ item }: { item: Track }) => {
         >
           <Pressable
             onPress={() => {
-              const track = Object.values(item.source).find((s) => s.current);
+              const track = Object.values(book.source).find((s) => s.current);
               if (
                 track &&
-                !(item.id === player.track?.id && player.state === "playing")
+                !(book.id === player.track?.id && player.state === "playing")
               ) {
-                player.set(item, { playOnLoad: true });
+                player.set(book, { playOnLoad: true });
               } else {
                 player.pause();
               }
@@ -64,7 +132,7 @@ export const Book = ({ item }: { item: Track }) => {
           >
             <IconSymbol
               name={
-                player.track?.id === item.id && player.state === "playing"
+                player.track?.id === book.id && player.state === "playing"
                   ? "pause.circle"
                   : "play.circle"
               }
@@ -80,19 +148,20 @@ export const Book = ({ item }: { item: Track }) => {
             items={[
               {
                 id: "download",
-                label: !item.source.local ? "Download" : "Remove",
+                label: !book.source.local ? "Download" : "Remove",
               },
             ]}
             active={""}
             onChange={(data) => {
               if (data === "download") {
-                const source = isLocalSource(item.source.local)
-                  ? item.source.local
-                  : undefined;
+                const source =
+                  book.source.local && isLocalSource(book.source.local)
+                    ? book.source.local
+                    : undefined;
                 if (source) {
                   download.remove(source.url).then(() => {
-                    store.update(item.id, {
-                      source: Object.entries(item.source).reduce(
+                    store.update(book.id, {
+                      source: Object.entries(book.source).reduce(
                         (acc, [key, value]) => {
                           if (key !== "remote") return acc;
                           acc[key as SourceType] = value;
@@ -104,6 +173,8 @@ export const Book = ({ item }: { item: Track }) => {
                   });
 
                   if (source.cover) download.remove(source.cover);
+                } else {
+                  startDownload();
                 }
               }
             }}
@@ -114,10 +185,15 @@ export const Book = ({ item }: { item: Track }) => {
   );
 };
 
-const Download = ({ book }: { book: Track }) => {
-  const [progress, setProgress] = useState(-1);
-  const download = useDownload();
-
+const Download = ({
+  book,
+  download,
+  progress,
+}: {
+  book: Track;
+  download: () => void;
+  progress: number;
+}) => {
   const store = useStore<Track>("books");
   const colors = useColors();
   const colorsInverted = useColors({ invert: true });
@@ -151,74 +227,7 @@ const Download = ({ book }: { book: Track }) => {
             },
             {
               text: "OK",
-              onPress: () => {
-                const url = book.source.remote?.url;
-                if (!url) return;
-                const prom: Promise<Record<string, string>>[] = [];
-                prom.push(
-                  new Promise((resolve, reject) => {
-                    if (!book?.id) reject("No track");
-                    download.start(
-                      url,
-                      `${book!.id}.mp3`,
-                      (percentage, done, uri) => {
-                        if (done) {
-                          if (uri) resolve({ url: uri });
-                          else reject("Resource download failed");
-                        } else {
-                          setProgress(percentage);
-                        }
-                      }
-                    );
-                  })
-                );
-                prom.push(
-                  new Promise((resolve, reject) => {
-                    if (!book?.id) reject("No track");
-                    download.start(
-                      book!.cover,
-                      `${book!.id}.${book!.cover.split(".").pop()}`,
-                      (percentage, done, uri) => {
-                        if (done) {
-                          if (uri) {
-                            resolve({ cover: uri });
-                          } else reject("Cover download failed");
-                        }
-                      }
-                    );
-                  })
-                );
-
-                Promise.all(prom)
-                  .then((values) => {
-                    if (!book?.source) return;
-                    const partial = values.reduce((acc, value) => {
-                      return { ...acc, ...value };
-                    }, {});
-
-                    store.update(book.id, {
-                      source: Object.entries(book.source).reduce(
-                        (acc, [key, value]) => {
-                          if (key === "local") return acc;
-                          acc[key as SourceType] = {
-                            ...value,
-                            current: false,
-                          };
-                          return acc;
-                        },
-                        {
-                          local: {
-                            ...partial,
-                            current: true,
-                          },
-                        } as Record<SourceType, Source>
-                      ),
-                    });
-                  })
-                  .catch((err) => {
-                    console.error(err);
-                  });
-              },
+              onPress: download,
             },
           ]
         );
