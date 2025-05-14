@@ -149,6 +149,13 @@ export const Book = ({ book }: { book: Track }) => {
                 id: "download",
                 label: !book.source.local ? "Download" : "Remove",
               },
+              {
+                id: "finish-status",
+                label:
+                  book.status === "finished"
+                    ? "Mark as in-progress"
+                    : "Mark as finished",
+              },
             ]}
             active={""}
             onChange={(data) => {
@@ -175,6 +182,12 @@ export const Book = ({ book }: { book: Track }) => {
                 } else {
                   startDownload();
                 }
+              }
+              if (data === "finish-status") {
+                store.update(book.id, {
+                  status:
+                    book.status === "finished" ? "in_progress" : "finished",
+                });
               }
             }}
           />

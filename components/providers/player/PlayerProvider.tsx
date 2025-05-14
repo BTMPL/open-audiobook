@@ -195,7 +195,10 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
     ) {
       if (trackProgress !== progress.position) {
         const result = books.update(trackId, {
-          status: "in_progress",
+          status:
+            progress.position + 1 >= progress.duration
+              ? "finished"
+              : "in_progress",
           progress: progress.position,
           lastPlayedAt: Date.now(),
         });

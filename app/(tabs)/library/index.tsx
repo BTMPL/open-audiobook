@@ -35,7 +35,7 @@ export default function Library() {
     { id: "in_progress", label: "In progress", items: started },
     { id: "downloaded", label: "Downloaded", items: downloaded },
     { id: "not_started", label: "Not Started", items: notStarted },
-    { id: "finished", label: "Finished", item: finished },
+    { id: "finished", label: "Finished", items: finished },
   ];
 
   const order = [
