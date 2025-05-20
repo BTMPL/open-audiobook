@@ -15,17 +15,15 @@ A modern, feature-rich audiobook player built with React Native and Expo. This a
 - 🎧 Audio Player
 
   - Chapter navigation
-  - Playback speed control (0.7x - 1.2x)
+  - Playback speed control (0.7x - 2x)
   - 30-second skip forward/backward
   - Background audio playback
   - Progress tracking and resume capability
-  - Mini player for quick access while browsing
+  - Integrates with iOS lockscreen widget
 
 - 💫 Modern UI
   - Dark/Light mode support
-  - Beautiful cover art display
-  - Smooth animations and transitions
-  - Intuitive gesture controls
+  - Cover art display
   - Chapter progress visualization
 
 ## Technologies
