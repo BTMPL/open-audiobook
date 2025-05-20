@@ -1,50 +1,100 @@
-# Welcome to your Expo app 👋
+# Audio Book Player
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A modern, feature-rich audiobook player built with React Native and Expo. This application provides a seamless listening experience with a beautiful user interface and powerful features.
 
-## Get started
+## Features
 
-1. Install dependencies
+- 📚 Library Management
+
+  - Browse and organize your audiobook collection
+  - Track reading progress
+  - Mark books as not started, in progress, or finished
+  - Download books for offline listening
+  - Sort books by activity, duration, or alphabetically
+
+- 🎧 Audio Player
+
+  - Chapter navigation
+  - Playback speed control (0.7x - 1.2x)
+  - 30-second skip forward/backward
+  - Background audio playback
+  - Progress tracking and resume capability
+  - Mini player for quick access while browsing
+
+- 💫 Modern UI
+  - Dark/Light mode support
+  - Beautiful cover art display
+  - Smooth animations and transitions
+  - Intuitive gesture controls
+  - Chapter progress visualization
+
+## Technologies
+
+- React Native with Expo
+- TypeScript for type safety
+- React Native Track Player for audio playback
+- Expo Router for navigation
+- SQLite for local storage
+- Custom theming system
+
+## Prerequisites
+
+- Node.js (LTS version recommended)
+- npm or yarn
+- iOS Simulator (for iOS development)
+- Android Studio and Android SDK (for Android development)
+- Xcode (for iOS development, macOS only)
+
+## Getting Started
+
+1. Clone the repository
+
+2. Install dependencies
 
    ```bash
    npm install
    ```
 
-2. Start the app
+3. Start the development server
 
    ```bash
-    npx expo start
+   npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+4. Run on your preferred platform:
+   - Press `i` to run on iOS Simulator
+   - Press `a` to run on Android Emulator
+   - Scan the QR code with Expo Go on your device
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Development
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### Project Structure
 
-## Get a fresh project
+- `/app` - Main application screens and navigation
+- `/components` - Reusable React components
+- `/constants` - Theme and configuration constants
+- `/utils` - Helper functions and utilities
+- `/hooks` - Custom React hooks
+- `/ios` & `/android` - Native platform configurations
 
-When you're ready, run:
+### Key Commands
 
-```bash
-npm run reset-project
-```
+- `npm start` - Start the Expo development server
+- `npm run ios` - Run the app in iOS Simulator
+- `npm run android` - Run the app in Android Emulator
+- `npm run web` - Run the app in web browser
+- `npm test` - Run tests
+- `npm run lint` - Run linter
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Contributing
 
-## Learn more
+1. Fork the repository
+2. Create a new branch for your feature
+3. Make your changes
+4. Submit a pull request
 
-To learn more about developing your project with Expo, look at the following resources:
+## Learn More
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- [Expo Documentation](https://docs.expo.dev/)
+- [React Native Documentation](https://reactnative.dev/docs/getting-started)
+- [React Native Track Player](https://react-native-track-player.js.org/)
