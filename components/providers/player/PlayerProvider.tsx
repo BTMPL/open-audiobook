@@ -75,7 +75,7 @@ export function findChapter(chapters: Chapter[], currentTime: number): Chapter {
 export const PlayerContext = React.createContext<{
   progress: Progress;
   track: Track | undefined;
-  set: (track: Track, options?: { playOnLoad?: boolean }) => void;
+  set: (track?: Track, options?: { playOnLoad?: boolean }) => void;
   seekBy: (position: number) => Promise<void>;
   seekTo: (position: number) => Promise<void>;
   stop: () => Promise<void>;
@@ -126,9 +126,12 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const unsub = appState.byId$(
       "appState",
-      ({ track, playbackRate }) => {
+      (data) => {
+        const { track, playbackRate } = data || {};
         if (track) {
           setTrack(books.byId(track));
+        } else {
+          setTrack(undefined);
         }
         if (playbackRate) {
           TrackPlayer.setRate(playbackRate);
@@ -163,7 +166,10 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
    */
   const { id: trackId, progress: trackProgress } = track || {};
   useEffect(() => {
-    if (!track) return;
+    if (!track) {
+      TrackPlayer.reset();
+      return;
+    }
     const url = getTrackUrl(track);
     if (!url) return;
 
@@ -217,10 +223,17 @@ export const PlayerProvider = ({ children }: { children: React.ReactNode }) => {
     <PlayerContext.Provider
       value={{
         progress,
-        set: ({ id }: Track, options = {}) => {
+        set: (track: Track | undefined, options = {}) => {
+          if (!track) {
+            appState.update("appState", {
+              track: undefined,
+            });
+            setTrack(undefined);
+            return;
+          }
           if (options.playOnLoad) TrackPlayer.pause();
           appState.update("appState", {
-            track: id,
+            track: track.id,
           });
           if (options.playOnLoad) {
             play();

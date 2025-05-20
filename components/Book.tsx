@@ -156,6 +156,10 @@ export const Book = ({ book }: { book: Track }) => {
                     ? "Mark as in-progress"
                     : "Mark as finished",
               },
+              {
+                id: "remove-book",
+                label: "Remove book",
+              },
             ]}
             active={""}
             onChange={(data) => {
@@ -188,6 +192,35 @@ export const Book = ({ book }: { book: Track }) => {
                   status:
                     book.status === "finished" ? "in_progress" : "finished",
                 });
+              }
+              if (data === "remove-book") {
+                Alert.alert(
+                  "Remove book",
+                  "Are you sure you want to remove this book? This will delete the book from your local library.",
+                  [
+                    {
+                      text: "Cancel",
+                      style: "cancel",
+                    },
+                    {
+                      text: "OK",
+                      onPress: () => {
+                        store.remove(book.id);
+                        const source =
+                          book.source.local && isLocalSource(book.source.local)
+                            ? book.source.local
+                            : undefined;
+
+                        source?.url && download.remove(source.url);
+                        source?.cover && download.remove(source.cover);
+                        if (player?.track?.id === book.id) {
+                          player.stop();
+                          player.set(undefined);
+                        }
+                      },
+                    },
+                  ]
+                );
               }
             }}
           />

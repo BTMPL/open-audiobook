@@ -66,10 +66,16 @@ const Model = <T extends StoreableObject>(table: StoreName, store: Store) => {
     store.setRow(table, id, serialize(object));
     return { [id]: object };
   };
-  const update = (id: string, object: Partial<T>): T =>
-    unserialize(
-      store.setPartialRow(table, id, serialize(object)).getRow(table, id)
-    );
+
+  const update = (id: string, object: Partial<T>): T => {
+    const row = serialize({
+      ...store.getRow(table, id),
+      ...object,
+    });
+
+    store.setRow(table, id, row);
+    return unserialize(row) as unknown as T;
+  };
   const remove = (id: string) => store.delRow(table, id);
   const byId = (id: string): T | undefined => {
     const data = unserialize(store.getRow(table, id));
@@ -79,12 +85,12 @@ const Model = <T extends StoreableObject>(table: StoreName, store: Store) => {
 
   const byId$ = (
     id: string,
-    callback: (data: T) => void,
+    callback: (data: T | undefined) => void,
     hot: boolean = false
   ): (() => void) => {
     if (hot) {
       const data = unserialize(store.getRow(table, id));
-      if (data?.id) callback(data as T);
+      callback(data as T);
     }
     const Id = store.addRowListener(table, id, (store, tableId) => {
       const data = unserialize(store.getRow(table, id));
