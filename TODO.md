@@ -1,1 +1,4 @@
 - i18n + a11y
+- splash + icon
+- playback speed - change to predefined buttons + slider from 0.5x to 3x
+- remove the pull-down animation from details card, make it actually dismiss the screen

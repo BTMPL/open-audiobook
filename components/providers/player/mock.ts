@@ -1,5 +1,158 @@
 import { Track } from "./PlayerProvider";
 
+export const track4: Track = {
+  id: "4",
+  source: {
+    remote: {
+      current: true,
+      url: "http://192.168.1.82:8080/endymion-1.mp3",
+    },
+  },
+  title: "Endymion (1 / 2)",
+  addedAt: Date.now(),
+  lastPlayedAt: Date.now(),
+  status: "not_started",
+  cover: "http://192.168.1.82:8080/endymion.jpg",
+  authors: ["Dan Simmons"],
+  synopsis:
+    "Two hundred forty-seven years after the Fall of Hyperion (DB 33584), the WorldWeb is divided into many kingdoms, and the military wing of the Catholic Church is in charge. Aenea, eleven, emerges from the Time Tombs to challenge the church authorities. Raul Endymion is snatched from death to assist her.",
+  duration: 10 * 3600 + 41 * 60 + 16,
+  progress: 0,
+  chapters: [
+    {
+      from: 0 * 3600 + 0 * 60 + 0,
+      to: 0 * 3600 + 3 * 60 + 4,
+      title: "(i) Book info",
+    },
+    { from: 0 * 3600 + 3 * 60 + 4, to: 0 * 3600 + 9 * 60 + 41, title: "(1)" },
+    { from: 0 * 3600 + 9 * 60 + 41, to: 0 * 3600 + 34 * 60 + 4, title: "(2)" },
+    { from: 0 * 3600 + 34 * 60 + 4, to: 0 * 3600 + 43 * 60 + 16, title: "(3)" },
+    { from: 0 * 3600 + 43 * 60 + 16, to: 1 * 3600 + 17 * 60 + 4, title: "(4)" },
+    { from: 1 * 3600 + 17 * 60 + 4, to: 1 * 3600 + 29 * 60 + 31, title: "(5)" },
+    {
+      from: 1 * 3600 + 29 * 60 + 31,
+      to: 1 * 3600 + 56 * 60 + 35,
+      title: "(6)",
+    },
+    {
+      from: 1 * 3600 + 56 * 60 + 35,
+      to: 2 * 3600 + 10 * 60 + 28,
+      title: "(7)",
+    },
+    {
+      from: 2 * 3600 + 10 * 60 + 28,
+      to: 2 * 3600 + 48 * 60 + 25,
+      title: "(8)",
+    },
+    { from: 2 * 3600 + 48 * 60 + 25, to: 3 * 3600 + 23 * 60 + 4, title: "(9)" },
+    {
+      from: 3 * 3600 + 23 * 60 + 4,
+      to: 3 * 3600 + 46 * 60 + 15,
+      title: "(10)",
+    },
+    {
+      from: 3 * 3600 + 46 * 60 + 15,
+      to: 3 * 3600 + 58 * 60 + 34,
+      title: "(11)",
+    },
+    {
+      from: 3 * 3600 + 58 * 60 + 34,
+      to: 4 * 3600 + 15 * 60 + 8,
+      title: "(12)",
+    },
+    {
+      from: 4 * 3600 + 15 * 60 + 8,
+      to: 4 * 3600 + 26 * 60 + 11,
+      title: "(13)",
+    },
+    {
+      from: 4 * 3600 + 26 * 60 + 11,
+      to: 4 * 3600 + 47 * 60 + 0,
+      title: "(14)",
+    },
+    {
+      from: 4 * 3600 + 47 * 60 + 0,
+      to: 4 * 3600 + 58 * 60 + 43,
+      title: "(15)",
+    },
+    {
+      from: 4 * 3600 + 58 * 60 + 43,
+      to: 5 * 3600 + 11 * 60 + 20,
+      title: "(16)",
+    },
+    {
+      from: 5 * 3600 + 11 * 60 + 20,
+      to: 5 * 3600 + 24 * 60 + 25,
+      title: "(17)",
+    },
+    {
+      from: 5 * 3600 + 24 * 60 + 25,
+      to: 5 * 3600 + 30 * 60 + 53,
+      title: "(18)",
+    },
+    {
+      from: 5 * 3600 + 30 * 60 + 53,
+      to: 5 * 3600 + 52 * 60 + 53,
+      title: "(19)",
+    },
+    {
+      from: 5 * 3600 + 52 * 60 + 53,
+      to: 6 * 3600 + 8 * 60 + 28,
+      title: "(20)",
+    },
+    {
+      from: 6 * 3600 + 8 * 60 + 28,
+      to: 6 * 3600 + 28 * 60 + 56,
+      title: "(21)",
+    },
+    {
+      from: 6 * 3600 + 28 * 60 + 56,
+      to: 6 * 3600 + 41 * 60 + 10,
+      title: "(22)",
+    },
+    {
+      from: 6 * 3600 + 41 * 60 + 10,
+      to: 6 * 3600 + 55 * 60 + 4,
+      title: "(23)",
+    },
+    {
+      from: 6 * 3600 + 55 * 60 + 4,
+      to: 7 * 3600 + 14 * 60 + 19,
+      title: "(24)",
+    },
+    {
+      from: 7 * 3600 + 14 * 60 + 19,
+      to: 7 * 3600 + 52 * 60 + 42,
+      title: "(25)",
+    },
+    {
+      from: 7 * 3600 + 52 * 60 + 42,
+      to: 8 * 3600 + 16 * 60 + 28,
+      title: "(26)",
+    },
+    {
+      from: 8 * 3600 + 16 * 60 + 28,
+      to: 8 * 3600 + 50 * 60 + 37,
+      title: "(27)",
+    },
+    {
+      from: 8 * 3600 + 50 * 60 + 37,
+      to: 9 * 3600 + 3 * 60 + 21,
+      title: "(28)",
+    },
+    {
+      from: 9 * 3600 + 3 * 60 + 21,
+      to: 9 * 3600 + 47 * 60 + 38,
+      title: "(29)",
+    },
+    {
+      from: 9 * 3600 + 47 * 60 + 38,
+      to: 10 * 3600 + 41 * 60 + 16,
+      title: "(30)",
+    },
+  ],
+};
+
 export const track3: Track = {
   id: "3",
   source: {
