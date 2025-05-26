@@ -1,7 +1,6 @@
 import * as FileSystem from "expo-file-system";
 import React from "react";
 import { MMKV } from "react-native-mmkv";
-import { remove } from "react-native-track-player/lib/src/trackPlayer";
 
 const store = new MMKV({
   id: "downloader",
