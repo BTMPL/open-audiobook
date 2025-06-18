@@ -151,7 +151,7 @@ export const Book = ({ book }: { book: Track }) => {
             items={[
               {
                 id: "download",
-                label: !book.source.local ? "Download" : "Remove",
+                label: !book.source.local ? "Download" : "Remove download",
               },
               {
                 id: "finish-status",

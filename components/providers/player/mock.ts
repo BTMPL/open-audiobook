@@ -1,5 +1,80 @@
 import { Track } from "./PlayerProvider";
 
+export const track6: Track = {
+  id: "6",
+  source: {
+    remote: {
+      current: true,
+      url: "http://192.168.1.82:8080/rise-of-endymion.mp3",
+    },
+  },
+  title: "Rise of Endymion (1 / 3)",
+  addedAt: Date.now(),
+  lastPlayedAt: Date.now(),
+  status: "not_started",
+  cover: "http://192.168.1.82:8080/rise-of-endymion.jpg",
+  authors: ["Dan Simmons"],
+  synopsis:
+    "In The Rise of Endymion, Dan Simmons brings to a triumphant conclusion one of the most celebrated, compelling, and dramatic science fiction sagas of our time.  Brilliant, provocative, unfailingly inventive, the odyssey began with the Hugo Award-winning Hyperion, continued through the critically acclaimed The Fall of Hyperion and Endymion, and now ascends to its greatest heights yet.... The final chapter of this magnificent saga begins with two momentous events: the death and resurrection of Pope Julius XV and the coming-of-age of the new messiah.  Her name is Aenea and she is the only person who can counter the pope and his plan to unleash the Pax Fleet, the Church's military wing, on a final genocidal Crusade to gain total dominion over the universe.  The Church is allied with the infamous AI Core, which has offered immortality to humankind--or at least to those faithful who pledge total obedience to the Church--but at what terrible price? The Core has its own dark motives and secrets, and only Aenea knows what they are.",
+  duration: 10 * 3600 + 21 * 60 * 5,
+  progress: 0,
+  chapters: [
+    {
+      from: 0 * 3600 + 0 * 60 + 0,
+      to: 0 * 3600 + 6 * 60 + 43,
+      title: "(i) Book info",
+    },
+    { from: 0 * 3600 + 6 * 60 + 43, to: 1 * 3600 + 0 * 60 + 14, title: "(01)" },
+    {
+      from: 1 * 3600 + 0 * 60 + 14,
+      to: 2 * 3600 + 10 * 60 + 26,
+      title: "(02)",
+    },
+    {
+      from: 2 * 3600 + 10 * 60 + 26,
+      to: 3 * 3600 + 10 * 60 + 33,
+      title: "(03)",
+    },
+    {
+      from: 3 * 3600 + 10 * 60 + 33,
+      to: 3 * 3600 + 35 * 60 + 18,
+      title: "(04)",
+    },
+    {
+      from: 3 * 3600 + 35 * 60 + 18,
+      to: 4 * 3600 + 6 * 60 + 11,
+      title: "(05)",
+    },
+    {
+      from: 4 * 3600 + 6 * 60 + 11,
+      to: 4 * 3600 + 37 * 60 + 15,
+      title: "(06)",
+    },
+    {
+      from: 4 * 3600 + 37 * 60 + 15,
+      to: 5 * 3600 + 16 * 60 + 10,
+      title: "(07)",
+    },
+    {
+      from: 5 * 3600 + 16 * 60 + 10,
+      to: 6 * 3600 + 4 * 60 + 40,
+      title: "(08)",
+    },
+    { from: 6 * 3600 + 4 * 60 + 40, to: 7 * 3600 + 6 * 60 + 16, title: "(09)" },
+    { from: 7 * 3600 + 6 * 60 + 16, to: 8 * 3600 + 9 * 60 + 24, title: "(10)" },
+    {
+      from: 8 * 3600 + 9 * 60 + 24,
+      to: 9 * 3600 + 35 * 60 + 50,
+      title: "(11)",
+    },
+    {
+      from: 9 * 3600 + 35 * 60 + 50,
+      to: 10 * 3600 + 21 * 60 * 5,
+      title: "(12)  ",
+    },
+  ],
+};
+
 export const track5: Track = {
   id: "5",
   source: {
