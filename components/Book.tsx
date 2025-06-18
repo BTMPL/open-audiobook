@@ -22,6 +22,7 @@ export const Book = ({ book }: { book: Track }) => {
   const download = useDownload();
   const store = useStore<Track>("books");
   const [progress, setProgress] = useState(-1);
+  const colors = useColors();
 
   const startDownload = () => {
     const url = book.source.remote?.url;
@@ -90,7 +91,10 @@ export const Book = ({ book }: { book: Track }) => {
   return (
     <View style={{ flexDirection: "row", gap: 8, alignItems: "center" }}>
       <View style={{ position: "relative" }}>
-        <Image src={getCoverUri(book)} style={{ width: 60, height: 60 }} />
+        <Image
+          src={getCoverUri(book)}
+          style={{ width: 60, height: 60, backgroundColor: colors.modal }}
+        />
         {!book.source.local && (
           <Download book={book} progress={progress} download={startDownload} />
         )}

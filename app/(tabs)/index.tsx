@@ -66,7 +66,7 @@ export default function Index() {
                   src={getCoverUri(item)}
                   style={{
                     aspectRatio: 0.5622,
-                    resizeMode: "contain",
+                    resizeMode: "cover",
                   }}
                 />
               </View>
