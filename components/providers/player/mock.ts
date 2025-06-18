@@ -1,5 +1,161 @@
 import { Track } from "./PlayerProvider";
 
+export const track5: Track = {
+  id: "5",
+  source: {
+    remote: {
+      current: true,
+      url: "http://192.168.1.82:8080/endymion-2.mp3",
+    },
+  },
+  title: "Endymion (2 / 2)",
+  addedAt: Date.now(),
+  lastPlayedAt: Date.now(),
+  status: "not_started",
+  cover: "http://192.168.1.82:8080/endymion.jpg",
+  authors: ["Dan Simmons"],
+  synopsis:
+    "Two hundred forty-seven years after the Fall of Hyperion (DB 33584), the WorldWeb is divided into many kingdoms, and the military wing of the Catholic Church is in charge. Aenea, eleven, emerges from the Time Tombs to challenge the church authorities. Raul Endymion is snatched from death to assist her.",
+  duration: 11 * 3600 + 27 * 60 + 13,
+  progress: 0,
+  chapters: [
+    { from: 0 * 3600 + 0 * 60 + 0, to: 0 * 3600 + 6 * 60 + 7, title: "(31)" },
+    { from: 0 * 3600 + 6 * 60 + 7, to: 0 * 3600 + 14 * 60 + 1, title: "(32)" },
+    {
+      from: 0 * 3600 + 14 * 60 + 1,
+      to: 0 * 3600 + 41 * 60 + 16,
+      title: "(33)",
+    },
+    {
+      from: 0 * 3600 + 41 * 60 + 16,
+      to: 0 * 3600 + 35 * 60 + 12,
+      title: "(34)",
+    },
+    {
+      from: 0 * 3600 + 35 * 60 + 12,
+      to: 0 * 3600 + 59 * 60 + 36,
+      title: "(35)",
+    },
+    {
+      from: 0 * 3600 + 59 * 60 + 36,
+      to: 0 * 3600 + 22 * 60 + 49,
+      title: "(36)",
+    },
+    {
+      from: 0 * 3600 + 22 * 60 + 49,
+      to: 0 * 3600 + 46 * 60 + 29,
+      title: "(37)",
+    },
+    {
+      from: 0 * 3600 + 46 * 60 + 29,
+      to: 0 * 3600 + 20 * 60 + 44,
+      title: "(38)",
+    },
+    {
+      from: 0 * 3600 + 20 * 60 + 44,
+      to: 0 * 3600 + 42 * 60 + 21,
+      title: "(39)",
+    },
+    {
+      from: 0 * 3600 + 42 * 60 + 21,
+      to: 0 * 3600 + 57 * 60 + 9,
+      title: "(40)",
+    },
+    {
+      from: 0 * 3600 + 57 * 60 + 9,
+      to: 0 * 3600 + 12 * 60 + 55,
+      title: "(41)",
+    },
+    {
+      from: 0 * 3600 + 12 * 60 + 55,
+      to: 0 * 3600 + 26 * 60 + 31,
+      title: "(42)",
+    },
+    {
+      from: 0 * 3600 + 26 * 60 + 31,
+      to: 0 * 3600 + 47 * 60 + 30,
+      title: "(43)",
+    },
+    {
+      from: 0 * 3600 + 47 * 60 + 30,
+      to: 0 * 3600 + 3 * 60 + 17,
+      title: "(44)",
+    },
+    {
+      from: 0 * 3600 + 3 * 60 + 17,
+      to: 0 * 3600 + 10 * 60 + 21,
+      title: "(45)",
+    },
+    {
+      from: 0 * 3600 + 10 * 60 + 21,
+      to: 0 * 3600 + 32 * 60 + 52,
+      title: "(46)",
+    },
+    {
+      from: 0 * 3600 + 32 * 60 + 52,
+      to: 0 * 3600 + 51 * 60 + 3,
+      title: "(47)",
+    },
+    {
+      from: 0 * 3600 + 51 * 60 + 3,
+      to: 0 * 3600 + 22 * 60 + 24,
+      title: "(48)",
+    },
+    {
+      from: 0 * 3600 + 22 * 60 + 24,
+      to: 0 * 3600 + 48 * 60 + 45,
+      title: "(49)",
+    },
+    { from: 0 * 3600 + 48 * 60 + 45, to: 0 * 3600 + 6 * 60 + 3, title: "(50)" },
+    { from: 0 * 3600 + 6 * 60 + 3, to: 0 * 3600 + 17 * 60 + 48, title: "(51)" },
+    {
+      from: 0 * 3600 + 17 * 60 + 48,
+      to: 0 * 3600 + 32 * 60 + 49,
+      title: "(52)",
+    },
+    {
+      from: 0 * 3600 + 32 * 60 + 49,
+      to: 0 * 3600 + 44 * 60 + 32,
+      title: "(53)",
+    },
+    {
+      from: 0 * 3600 + 44 * 60 + 32,
+      to: 10 * 3600 + 10 * 60 + 3,
+      title: "(54)",
+    },
+    {
+      from: 10 * 3600 + 10 * 60 + 3,
+      to: 10 * 3600 + 41 * 60 + 7,
+      title: "(55)",
+    },
+    {
+      from: 10 * 3600 + 41 * 60 + 7,
+      to: 10 * 3600 + 46 * 60 + 0,
+      title: "(56)",
+    },
+    {
+      from: 10 * 3600 + 46 * 60 + 0,
+      to: 10 * 3600 + 0 * 60 + 47,
+      title: "(57)",
+    },
+    {
+      from: 10 * 3600 + 0 * 60 + 47,
+      to: 10 * 3600 + 15 * 60 + 55,
+      title: "(58)",
+    },
+    {
+      from: 10 * 3600 + 15 * 60 + 55,
+      to: 10 * 3600 + 20 * 60 + 51,
+      title: "(59)",
+    },
+    {
+      from: 10 * 3600 + 20 * 60 + 51,
+      to: 11 * 3600 + 27 * 60 + 13,
+      title: "(60)",
+    },
+  ],
+};
+
 export const track4: Track = {
   id: "4",
   source: {
