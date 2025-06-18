@@ -70,7 +70,12 @@ export const DownloadProvider = ({
           );
 
           downloadResumable.downloadAsync().then((result) => {
-            if (result) callback(100, true, result.uri);
+            if (result)
+              callback(
+                100,
+                true,
+                result.uri.replace(FileSystem.documentDirectory || "", "")
+              );
           });
         });
 
