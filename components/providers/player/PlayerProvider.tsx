@@ -9,7 +9,6 @@ import TrackPlayer, {
   useProgress,
 } from "react-native-track-player";
 import { useStore } from "../datbase/DatabaseProvider";
-import { track1, track2, track3, track4, track5, track6 } from "./mock";
 import { AppState } from "../app/AppProvider";
 import { getCoverUri } from "@/utils/getCoverUri";
 import { getTrackUrl } from "@/utils/getTrackUrl";
@@ -52,14 +51,12 @@ export type Source = {
   current: boolean;
 } & (RemoteSource | LocalSource);
 
-type BookTrack = {
+export type BookTrack = {
   url: string;
   title: string;
   artist: string;
   cover: string;
 };
-
-export const tracks = [track1, track2, track3, track4, track5, track6];
 
 export function findChapter(chapters: Chapter[], currentTime: number): Chapter {
   for (let i = 0; i < chapters.length; i++) {

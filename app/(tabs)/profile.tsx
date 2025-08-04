@@ -1,8 +1,14 @@
 import { useStore } from "@/components/providers/datbase/DatabaseProvider";
-import { Track, tracks } from "@/components/providers/player/PlayerProvider";
+import { Track } from "@/components/providers/player/PlayerProvider";
 import { ThemedText } from "@/components/ThemedText";
-import { useEffect } from "react";
-import { SafeAreaView, ScrollView, TouchableOpacity } from "react-native";
+import { useEffect, useState } from "react";
+import {
+  SafeAreaView,
+  ScrollView,
+  TouchableOpacity,
+  TextInput,
+  View,
+} from "react-native";
 
 export default function Profile() {
   const store = useStore<Track>("books");
@@ -11,21 +17,46 @@ export default function Profile() {
     return () => console.log("unmount");
   }, []);
 
+  const [url, setUrl] = useState("");
+
   return (
     <SafeAreaView>
-      <ScrollView>
-        {tracks.map((track, it) => (
-          <TouchableOpacity key={it}>
-            <ThemedText
-              onPress={async () => {
-                if (store.byId(track.id)) store.remove(track.id);
-                else store.add(track);
-              }}
-            >
-              {store.byId(track.id) ? "remove" : "add"} {track.title}
-            </ThemedText>
+      <ScrollView
+        style={{
+          padding: 20,
+        }}
+      >
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+          }}
+        >
+          <TextInput
+            placeholder="URL"
+            style={{
+              flex: 1,
+            }}
+            onChangeText={(text) => setUrl(text)}
+          />
+          <TouchableOpacity
+            onPress={() => {
+              console.log("Attempting to load from " + url);
+              (async () => {
+                try {
+                  const json = await fetch(url);
+                  const data = await json.json();
+                  store.add(data);
+                  console.log("Data added to store:", data);
+                } catch {
+                  console.error("Failed to fetch or parse JSON from URL");
+                }
+              })();
+            }}
+          >
+            <ThemedText>Import</ThemedText>
           </TouchableOpacity>
-        ))}
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
